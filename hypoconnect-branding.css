@@ -1,0 +1,33 @@
+/* add a class with javascript: $("body").addClass("hypoconnect"); */
+
+body.hypoconnect { background-color: #E0EDEE; }
+
+body.hypoconnect .cgg-progress__bar { background-color: #8D1656 !important; }
+body.hypoconnect .cgg-progress__bar-container { background-color: #5E6E82 !important; }
+body.hypoconnect .cgg-progress__step-icon.cgg-progress__highlighted { background-color: #8D1656; border-color: #8D1656;}
+body.hypoconnect .cgg-progress__step-icon.cgg-progress__notHighlighted {border: 2px solid #5A6E84 !important; background-color:#EFF9F9;}
+
+body.hypoconnect .cgg-headline-description__headline {color:#333;}
+body.hypoconnect .cgg-group-button .continue-button {background-color:#9A0058; border-color:#9A0058;}
+body.hypoconnect .cgg-group-button .go-back-button {background-color:#FFF; border: 1px solid #004F9A;}
+body.hypoconnect .cgg-group-button .go-back-button>span {color:#004F9A;}
+
+body.hypoconnect .cgg-progress__step-icon i, body.hypoconnect .m-cgg-icon--chevron-right {color:#9A0058;}
+body.hypoconnect .ci-info-box, body.hypoconnect .cgg-info-box {box-shadow:5px 5px 0 1px #CADDDF; color:#004F9A}
+body.hypoconnect .ci-info-box>.info_up_half { border-bottom-color:#004F9A;}
+body.hypoconnect .cgg-hint__header a.cgg-help {color:#9A0058;}
+
+body.hypoconnect .ci-info-box .ci-info-box__selectedLink.ci-info-box__selectedLink { color:#9A0058;}
+body.hypoconnect .ci-info-box .info_link_style a { color:#9A0058;}
+
+body.hypoconnect .cgg-global-input {border: 1px solid #FFF}
+
+body.hypoconnect .funnel-page__step-container:before {
+    content: "";
+    width: 100px;
+    height: 50px;
+    background:url("https://www.patronale-life.be/sites/default/files/styles/paragraaf_image/public/fotos/logo_hypoconnect.jpg?itok=MXoT2JXf") no-repeat ;
+    background-size: 100%;
+    display: block;
+    margin: 0px 0px 0px 0px;
+}
