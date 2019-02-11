@@ -115,11 +115,6 @@ var highlightEmploymentStatus = '<div class="cgg-global-input--error-notificatio
 var highlightLTV = '<div class="cgg-global-input--error-notification ng-binding ng-hide" ng-show="showErrorMessage" style="margin-top: -10px; margin-bottom: 10px" id="highlightLTV"><span class="cgg-has-error-msg-icn m-cgg js-newsletter-submit-icon m-cgg-icon--warning"></span>'+locales[lang]['highlightLTV']+'</div>';
 var boxFP = '<div class="info_up_half"> <span class="info_up_half--title ng-binding">'+locales[lang]['title']+'</span> </div><div class="info_down_half"><div class="radio-toolbar"><input type="radio" id="radio1" name="region" value="brussels" checked><label for="radio1">'+locales[lang]['brussels']+'</label><input type="radio" id="radio2" name="region" value="flanders"><label for="radio2">'+locales[lang]['flanders']+'</label><input type="radio" id="radio3" name="region" value="wallonia"><label for="radio3">'+locales[lang]['wallonia']+'</label></div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Droits d\'enregistrement">'+locales[lang]['registrationRights']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-registration-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">'+locales[lang]['notaryFees']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-notary-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">'+locales[lang]['mortgageFees']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-mortgage-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Coût total du projet">'+locales[lang]['totalCost']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-total-cost"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span></div></div>';
 
-// Remove promo box. Best to put to css stylesheet to prevent it from appearing in the first place
-// $(".cgg-promotion-info").hide(); // done in CSS
-// Add box for the financial plan
-$(".ci-info-box").prepend(boxFP);
-
 // Style the financial plan (can be beautified if GTM is used)
 // var style = document.createElement('style'); // done in CSS
 // style.type = 'text/css';
@@ -222,6 +217,8 @@ $( document ).ready(function() {
 	// Load funnel things
 	if(window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen")> -1 ) {
 		ipLookUp();
+		//	build and update financial plan elements on load
+		$(".ci-info-box").prepend(boxFP);
 		updateFP();
 
 		// FIME: wrong place! needs to load in step 2!
