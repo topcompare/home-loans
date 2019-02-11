@@ -1,33 +1,118 @@
-/* add a class with javascript: $("body").addClass("hypoconnect"); */
+/* 
+	HL funnel customizations
+*/ 
 
-body.hypoconnect { background-color: #E0EDEE; }
+.cgg-promotion-info {
+    display: none;
+}
 
-body.hypoconnect .cgg-progress__bar { background-color: #8D1656 !important; }
-body.hypoconnect .cgg-progress__bar-container { background-color: #5E6E82 !important; }
-body.hypoconnect .cgg-progress__step-icon.cgg-progress__highlighted { background-color: #8D1656; border-color: #8D1656;}
-body.hypoconnect .cgg-progress__step-icon.cgg-progress__notHighlighted {border: 2px solid #5A6E84 !important; background-color:#EFF9F9;}
+/* financial plan styling. Make sure it does not unexpectedly affect other elements! */
+.radio-toolbar input[type=radio]{
+    display:none
+}
+.radio-toolbar label{
+    display:inline-block;
+    padding:4px 11px;
+    margin:0 10px 10px 0;
+    cursor:pointer;
+    width:95px;
+    text-align:center;
+    border:1px solid #77aa43
+}
+.radio-toolbar input[type=radio]:checked+label{
+    background-color:#77aa43;
+    color:#fff
+}
 
-body.hypoconnect .cgg-headline-description__headline {color:#333;}
-body.hypoconnect .cgg-group-button .continue-button {background-color:#9A0058; border-color:#9A0058;}
-body.hypoconnect .cgg-group-button .go-back-button {background-color:#FFF; border: 1px solid #004F9A;}
-body.hypoconnect .cgg-group-button .go-back-button>span {color:#004F9A;}
 
-body.hypoconnect .cgg-progress__step-icon i, body.hypoconnect .m-cgg-icon--chevron-right {color:#9A0058;}
-body.hypoconnect .ci-info-box, body.hypoconnect .cgg-info-box {box-shadow:5px 5px 0 1px #CADDDF; color:#004F9A}
-body.hypoconnect .ci-info-box>.info_up_half { border-bottom-color:#004F9A;}
-body.hypoconnect .cgg-hint__header a.cgg-help {color:#9A0058;}
+/*
+	HL funnel HypoConnect branding
+*/
 
-body.hypoconnect .ci-info-box .ci-info-box__selectedLink.ci-info-box__selectedLink { color:#9A0058;}
-body.hypoconnect .ci-info-box .info_link_style a { color:#9A0058;}
+body.hypoconnect{
+    background-color:#e0edee
+}
+body.hypoconnect .cgg-progress__bar{
+    background-color:#8d1656 !important
+}
+body.hypoconnect .cgg-progress__bar-container{
+    background-color:#5e6e82 !important
+}
+body.hypoconnect .cgg-progress__step-icon.cgg-progress__highlighted{
+    background-color:#8d1656;
+    border-color:#8d1656
+}
+body.hypoconnect .cgg-progress__step-icon.cgg-progress__notHighlighted{
+    border:2px solid #5a6e84 !important;
+    background-color:#eff9f9
+}
+body.hypoconnect .cgg-headline-description__headline{
+    color:#333
+}
+body.hypoconnect .cgg-group-button .continue-button{
+    background-color:#9a0058;
+    border-color:#9a0058
+}
+body.hypoconnect .cgg-group-button .go-back-button{
+    background-color:#FFF;
+    /*border:1px solid #004f9a*/
+}
+body.hypoconnect .cgg-group-button .go-back-button>span{
+    /*color:#004f9a */
+}
+body.hypoconnect .cgg-info-box,body.hypoconnect .ci-info-box{
+    box-shadow:5px 5px 0 1px #cadddf;
+    color:#004f9a
+}
+body.hypoconnect .ci-info-box>.info_up_half{
+    border-bottom-color:#004f9a
+}
+body.hypoconnect .cgg-global-input{
+    border:1px solid #FFF
+}
+body.hypoconnect .funnel-page__step-container:before{
+    content:"";
+    width:100px;
+    height:50px;
+    background:url(https://www.patronale-life.be/sites/default/files/styles/paragraaf_image/public/fotos/hypoconnect-logo.png?itok=8-nMF24L) no-repeat;
+    background-size:100%;
+    display:block;
+    margin:0
+}
+body.hypoconnect .cgg-progress__step-icon i,body.hypoconnect .m-cgg-icon--chevron-right,body.hypoconnect .cgg-hint__header a.cgg-help,body.hypoconnect .ci-info-box .ci-info-box__selectedLink.ci-info-box__selectedLink,body.hypoconnect .ci-info-box .info_link_style a{
+    color:#9a0058
+}
+body.hypoconnect .radio-toolbar label{
+    border:1px solid #9a0058
+}
+body.hypoconnect .radio-toolbar input[type=radio]:checked+label{
+    background-color:#9a0058
+}
 
-body.hypoconnect .cgg-global-input {border: 1px solid #FFF}
+body.hypoconnect application-skip-link {
+	font-style: italic;
+}
+ 
+/*
+	Results table HC branding
+*/
 
-body.hypoconnect .funnel-page__step-container:before {
-    content: "";
-    width: 100px;
-    height: 50px;
-    background:url("https://www.patronale-life.be/sites/default/files/styles/paragraaf_image/public/fotos/logo_hypoconnect.jpg?itok=MXoT2JXf") no-repeat ;
-    background-size: 100%;
-    display: block;
-    margin: 0px 0px 0px 0px;
+.product-name-container {
+	background-color: rgba(141, 22, 86, 0.15);
+}
+
+.product-name-container .product-label {
+	background-color: #8d1656;
+}
+
+.score-ranking-medium, .score-ranking-high, .score-ranking-low {
+	background-color: rgba(141, 22, 86, 0.15);
+}
+
+.banner-title.exclusive {
+	color: #8d1656;
+}
+
+.footer-container {
+	background-color: #fafafa;
 }
