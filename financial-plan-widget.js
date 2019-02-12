@@ -15,9 +15,9 @@ var locales = {
 		'totalCost': 'Coût total du projet',
 		'highlightEmploymentStatus': ' Ce statut professionnel a des conditions spéciales pour les taux. Nous afficherons les taux standards mais le courtier sera informé de votre statut afin de vous proposer le meilleur taux.',
 		'highlightLTV': ' Vous ne disposez pas de suffisamment de fonds propres pour financer votre projet. Peu de banques accordent un prêt hypothécaire avec une quotité  supérieure à 100%.',
-		'disclaimerTopHC' : 'Vos données seront envoyées à et traitées par HypoConnect SA, courtier en crédit hypothécaire, pour fournir un TAEG plus précis et une éligibilité préliminaire testée auprès des 15+ banques partenaires de HypoConnect. En soumettant votre recherche, vous donnez implicitement votre accord pour l’utilisation de vos données à ces fins.',
-		'disclaimerBottomHC': 'This page, which is under the responsibility of HypoConnect NV, is hosted by TopCompare Information Services Belgium.',
-		'disclaimerResultsHC': 'This product overview is hosted by TopCompare Information Services Belgium BVBA. HypoConnect NV features products from broker banks (purple color), indicating your likelihood of approval and a more personalized APR using your personal and financial information. Any indication of APR or likelihood of approval is not binding, the final conditions are the ultimate responsibility of the bank. TopCompare Information Services Belgium BVBA features products from non-broker banks, only using the information about your mortgage project.',
+		'disclaimerTopHC' : 'Vos données seront envoyées à et traitées par HypoConnect SA, courtier en crédit hypothécaire, pour fournir un TAEG plus précis et une éligibilité préliminaire testée auprès des 15+ banques partenaires de HypoConnect. En soumettant votre recherche, vous donnez implicitement votre accord pour l’utilisation de vos données à ces fins. Après avoir soumis vos informations, vous aurez accès en temps réel aux taux personnalisés et votre éligibilité auprès de ces banques.',
+		'disclaimerBottomHC': 'Cette page, qui est sous la responsabilité de HypoConnect NV, est hébergée par TopCompare Information Services Belgium.',
+		'disclaimerResultsHC': 'Cet aperçu des produits est hébergé par TopCompare Information Services Belgium BVBA. HypoConnect NV propose des produits de banques disponibles via courtier (couleur mauve), indiquant votre probabilité d\'éligibilité et un TAEG adapté selon vos informations personnelles et financières. Toute indication du TAEG ou de la probabilité d\'éligibilité n\'est pas contraignante, les conditions finales de la souscription au crédit hypothécaire sont la responsabilité ultime de la banque. TopCompare Information Services Belgium BVBA propose des produits de banques disponibles sans courtier, en utilisant uniquement les informations relatives à votre projet hypothécaire. Le calcul du TAEG présenté dans le tableau de résultats se fonde sur les hypothèses et montants suivants:<br>- le montant total des intérêts qui sont payés ;<br>- les frais de dossier entre 0 et 500 EUR en fonction de la banque ;<br>- les frais d’expertise d\'une valeur moyenne de 250 EUR pour faire estimer la valeur de votre habitation par un expert ;<br>- les frais de notaire (autres que les honoraires) estimés pour l’établissement d’une inscription hypothécaire totale du montant de votre prêt ;<br>- la prime unique d’assurance solde restant dû,calculée sur base du taux sur le marché pour une personne non fumeur de 30 ans;<br>- le total des primes d’assurance habitation en tant que propriétaire, la prime annuelle moyenne du marché étant estimée à 320 EUR pour une habitation standard.',
 		'disclaimerEmail' : 'En procédant au tableau de résultats, j\'accepte explicitement que TopCompare réutilise les données précédemment complétées à des fins marketing et de future comparaison.',
 		'bannerLabel' : 'HypoConnect'
 	},
@@ -30,19 +30,19 @@ var locales = {
         'mortgageFees' : 'Hypotheekkosten',
         'notaryFees' : 'Notariskosten',
         'totalCost': 'Totale kosten van het project',
-		'highlightEmploymentStatus': ' Ce statut professionnel a des conditions spéciales pour les taux. Nous afficherons les taux standards mais le courtier sera informé de votre statut afin de vous proposer le meilleur taux.',
-		'highlightLTV': ' Vous ne disposez pas de suffisamment de fonds propres pour financer votre projet. Peu de banques accordent un prêt hypothécaire avec une quotité  supérieure à 100%. Nous afficherons les taux standards mais le courtier sera informé de votre situation afin de vous proposer le meilleur taux.',
-		'disclaimerTopHC' : 'Uw gegevens worden verzonden naar en verwerkt door HypoConnect hypotheekmakelaar om een nauwkeuriger JKP en voorlopige geschiktheid getest met de 15+ partner banken van HypoConnect. Door het indienen van uw simulatie gaat u impliciet akkoord met het gebruik van uw gegevens voor deze doeleinden.',
-		'disclaimerBottomHC': 'This page, which is under the responsibility of HypoConnect NV, is hosted by TopCompare Information Services Belgium.',
-		'disclaimerResultsHC': 'This product overview is hosted by TopCompare Information Services Belgium BVBA. HypoConnect NV features products from broker banks (purple color), indicating your likelihood of approval and a more personalized APR using your personal and financial information. Any indication of APR or likelihood of approval is not binding, the final conditions are the ultimate responsibility of the bank. TopCompare Information Services Belgium BVBA features products from non-broker banks, only using the information about your mortgage project.',
+		'highlightEmploymentStatus': ' Deze professionele status heeft speciale voorwaarden voor tarieven. Wij geven de standaardtarieven weer, maar de makelaar wordt op de hoogte gebracht van uw status om u het beste tarief aan te bieden.',
+		'highlightLTV': ' U beschikt niet over voldoende eigen vermogen om uw project te financieren. Weinig banken verstrekken een hypothecair krediet met een quotiteit hoger dan 100%. Wij geven de standaardtarieven weer, maar de makelaar wordt op de hoogte gebracht van uw situatie om u het beste tarief aan te bieden.',
+		'disclaimerTopHC' : 'Uw gegevens worden verzonden naar en verwerkt door HypoConnect hypotheekmakelaar om een nauwkeuriger JKP en voorlopige geschiktheid getest met de 15+ partner banken van HypoConnect. Door het indienen van uw simulatie gaat u impliciet akkoord met het gebruik van uw gegevens voor deze doeleinden. Na het invoeren van uw gegevens heeft u in realtime toegang tot gepersonaliseerde tarieven en uw geschiktheid bij deze banken',
+		'disclaimerBottomHC': 'Deze webpagina, die onder de verantwoordelijkheid van HypoConnect NV valt, wordt gehost door TopCompare Information Services Belgium.',
+		'disclaimerResultsHC': 'Dit productoverzicht wordt gehost door TopCompare Information Services Belgium BVBA. HypoConnect NV beschikt over producten van makelaarsbanken (paarse kleur) die uw waarschijnlijkheid van goedkeuring en een meer gepersonaliseerde JKP met behulp van uw persoonlijke en financiële informatie aangeven. Elke indicatie van een JKP of waarschijnlijkheid van goedkeuring is niet bindend, de uiteindelijke voorwaarden zijn de verantwoordelijkheid van de bank. TopCompare Information Services Belgium BVBA bevat producten van niet-makelaarsbanken en gebruikt alleen de informatie over uw hypotheekproject voor dit doel. Het jaarlijks kostenpercentage (JKP) vertegenwoordigt de kostprijs van de lening op jaarbasis en houdt rekening met de verschillende kosten verbonden aan een hypothecaire lening. De berekening van het JKP in de resultatentabel is gebaseerd op de volgende veronderstellingen en bedragen:<br>- het totale bedrag aan rente dat wordt betaald;<br>- de administratieve kosten tussen 0 en 500 EUR, afhankelijk van de bank;<br>- de kosten van een expertiseschatting met een gemiddelde waarde van 250 EUR om de waarde van uw woning door een expert te laten schatten;<br>- de geschatte notariskosten (andere dan honoraria) voor het vaststellen van een totale hypotheekregistratie van het bedrag van uw lening;<br>- de eenmalige premie voor de schuldsaldoverzekering, berekend op basis van het markttarief voor een niet-roker van 30 jaar;<br>- de totale woningverzekeringspremies als eigenaar, waarbij de gemiddelde jaarlijkse marktpremie wordt geschat op 320 euro voor een standaardwoning.',
 		'disclaimerEmail' : 'Door naar de resultatentabel te gaan, accepteer ik uitdrukkelijk dat TopCompare de eerder ingevulde gegevens opnieuw gebruikt voor marketing en toekomstige vergelijkingen.',
 		'bannerLabel' : 'HypoConnect'
 	}
 };
+
 var lang = 'fr';
-if (document.documentElement.lang == "nl-BE") lang = 'nl';
 var formData;
-var regionalFees = {'brussels': 0.125, 'wallonia': 0.125, 'flanders': 0.10};
+var regionalFees = {'brussels': 0.125, 'wallonia': 0.125, 'flanders': 0.10}, region = "flanders";
 var notaryFixedCost = 2178;
 var adminFeesMin = 800, adminFeesMax = 1100;
 var VAT = 1.21;
@@ -107,6 +107,11 @@ function getStaircaseRow(matrix,value) {
 	}
 }
 
+if (document.documentElement.lang == "nl-BE") {
+	lang = 'nl';
+	region = 'flanders';
+}
+
 /*
 SECTION: Create DOM structure
 */
@@ -114,18 +119,7 @@ SECTION: Create DOM structure
 var highlightEmploymentStatus = '<div class="cgg-global-input--error-notification ng-binding ng-hide" ng-show="showErrorMessage" style="margin-top: -10px; margin-bottom: 10px" id="highlightEmploymentStatus"><span class="cgg-has-error-msg-icn m-cgg js-newsletter-submit-icon m-cgg-icon--warning"></span>'+locales[lang]['highlightEmploymentStatus']+'</div>';
 var highlightLTV = '<div class="cgg-global-input--error-notification ng-binding ng-hide" ng-show="showErrorMessage" style="margin-top: -10px; margin-bottom: 10px" id="highlightLTV"><span class="cgg-has-error-msg-icn m-cgg js-newsletter-submit-icon m-cgg-icon--warning"></span>'+locales[lang]['highlightLTV']+'</div>';
 var boxFP = '<div class="info_up_half"> <span class="info_up_half--title ng-binding">'+locales[lang]['title']+'</span> </div><div class="info_down_half"><div class="radio-toolbar"><input type="radio" id="radio1" name="region" value="brussels" checked><label for="radio1">'+locales[lang]['brussels']+'</label><input type="radio" id="radio2" name="region" value="flanders"><label for="radio2">'+locales[lang]['flanders']+'</label><input type="radio" id="radio3" name="region" value="wallonia"><label for="radio3">'+locales[lang]['wallonia']+'</label></div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Droits d\'enregistrement">'+locales[lang]['registrationRights']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-registration-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">'+locales[lang]['notaryFees']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-notary-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">'+locales[lang]['mortgageFees']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-mortgage-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Coût total du projet">'+locales[lang]['totalCost']+'</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-total-cost"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span></div></div>';
-
-// Style the financial plan (can be beautified if GTM is used)
-// var style = document.createElement('style'); // done in CSS
-// style.type = 'text/css';
-// style.innerHTML = '.radio-toolbar input[type=radio]{display:none}.radio-toolbar label{display:inline-block;padding:4px 11px;margin:0 10px 10px 0;cursor:pointer;width:95px;text-align:center;border:1px solid #77aa43}.radio-toolbar input[type=radio]:checked+label{background-color:#77aa43;color:#fff}';
-// document.getElementsByTagName('head')[0].appendChild(style);
-
-// HypoConnect branding
-//var style = document.createElement('style'); // done in CSS
-//style.type = 'text/css';
-//style.innerHTML = 'body.hypoconnect{background-color:#e0edee}body.hypoconnect .cgg-progress__bar{background-color:#8d1656 !important}body.hypoconnect .cgg-progress__bar-container{background-color:#5e6e82 !important}body.hypoconnect .cgg-progress__step-icon.cgg-progress__highlighted{background-color:#8d1656;border-color:#8d1656}body.hypoconnect .cgg-progress__step-icon.cgg-progress__notHighlighted{border:2px solid #5a6e84 !important;background-color:#eff9f9}body.hypoconnect .cgg-headline-description__headline{color:#333}body.hypoconnect .cgg-group-button .continue-button{background-color:#9a0058;border-color:#9a0058}body.hypoconnect .cgg-group-button .go-back-button{background-color:#FFF;border:1px solid #004f9a}body.hypoconnect .cgg-group-button .go-back-button>span{color:#004f9a}body.hypoconnect .cgg-info-box,body.hypoconnect .ci-info-box{box-shadow:5px 5px 0 1px #cadddf;color:#004f9a}body.hypoconnect .ci-info-box>.info_up_half{border-bottom-color:#004f9a}body.hypoconnect .cgg-global-input{border:1px solid #FFF}body.hypoconnect .funnel-page__step-container:before{content:"";width:100px;height:50px;background:url(https://www.patronale-life.be/sites/default/files/styles/paragraaf_image/public/fotos/hypoconnect-logo.png?itok=8-nMF24L) no-repeat;background-size:100%;display:block;margin:0}body.hypoconnect .cgg-progress__step-icon i,body.hypoconnect .m-cgg-icon--chevron-right,body.hypoconnect .cgg-hint__header a.cgg-help,body.hypoconnect .ci-info-box .ci-info-box__selectedLink.ci-info-box__selectedLink,body.hypoconnect .ci-info-box .info_link_style a{color:#9a0058}body.hypoconnect .radio-toolbar label{border:1px solid #9a0058}body.hypoconnect .radio-toolbar input[type=radio]:checked+label{background-color:#9a0058}';
-//document.getElementsByTagName('head')[0].appendChild(style);
+var boxEmail = '<label style="font-weight: normal"><input type="checkbox" name="consent" style="margin-right: 5px">'+locales[lang]['disclaimerEmail']+'</label>';
 
 /*
 SECTION: define formulas
@@ -142,18 +136,23 @@ function computeFP() {
 		if (formData["ownFunds"]) ownFunds = parseFloat(formData["ownFunds"]);
 	}else{ //we have a problem! It might happen that the funnel has stored the values but that there is nothing in cggCore.formData --> How can it be?
 		// do nothing, keep the value in the variables
-		console.log("Warning: Cannot capture property value and own funds fields!");
+		//console.log("Warning: Cannot capture property value and own funds fields!");
 	}
-	// compute the costs
-	registrationFees = propertyValue*regionalFees[$('input[name=region]:checked').val()];
+	if ($('input[name=region]:checked').val() != null){
+		region = $('input[name=region]:checked').val();
+	}
+	
+	// compute the costs only if propertyValue is set (avoid showing costs before even starting the funnel)
+	if (propertyValue) {
+		registrationFees = propertyValue*regionalFees[region];
 
-	notaryFixedFee = ( notaryMatrix[getStaircaseRow(notaryMatrix,propertyValue)][notaryFixedRateCol] * VAT) + notaryFixedCost;
-	notaryVariablePercentage = notaryMatrix[getStaircaseRow(notaryMatrix,propertyValue)][notaryPercentageCol]*VAT;
-	notaryFeesMax = (propertyValue*notaryVariablePercentage) + notaryFixedFee;
+		notaryFixedFee = ( notaryMatrix[getStaircaseRow(notaryMatrix,propertyValue)][notaryFixedRateCol] * VAT) + notaryFixedCost;
+		notaryVariablePercentage = notaryMatrix[getStaircaseRow(notaryMatrix,propertyValue)][notaryPercentageCol]*VAT;
+		notaryFeesMax = (propertyValue*notaryVariablePercentage) + notaryFixedFee;
 
-	totalAmount = propertyValue + notaryFeesMax + registrationFees - ownFunds;
- 	mortgageFeesMax = ( mortgageMatrix[getStaircaseRow(mortgageMatrix,totalAmount)][mortgagePercentageCol] * totalAmount ) + mortgageMatrix[getStaircaseRow(mortgageMatrix,totalAmount)][mortgageFixedRateCol] - totalAmount;
-
+		totalAmount = propertyValue + notaryFeesMax + registrationFees - ownFunds;
+		mortgageFeesMax = ( mortgageMatrix[getStaircaseRow(mortgageMatrix,totalAmount)][mortgagePercentageCol] * totalAmount ) + mortgageMatrix[getStaircaseRow(mortgageMatrix,totalAmount)][mortgageFixedRateCol] - totalAmount;
+	}
 }
 // Transform the numbers in nice currency format
 function formatCurrency(num) {
@@ -163,10 +162,15 @@ function formatCurrency(num) {
 // Update the financial plan
 function updateFP(){
 	computeFP();
-	document.getElementById("fp-registration-fees").lastChild.nodeValue = formatCurrency(registrationFees);
-	document.getElementById("fp-notary-fees").lastChild.nodeValue = formatCurrency(notaryFeesMax);	
-	document.getElementById("fp-mortgage-fees").lastChild.nodeValue = formatCurrency(mortgageFeesMax);
-	document.getElementById("fp-total-cost").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax));
+	// Check if financial plan DOM is present, otherwise build it. For some reason, it does not work in $().ready
+	if (document.getElementById("fp-registration-fees") != null) {
+		document.getElementById("fp-registration-fees").lastChild.nodeValue = formatCurrency(registrationFees);
+		document.getElementById("fp-notary-fees").lastChild.nodeValue = formatCurrency(notaryFeesMax);	
+		document.getElementById("fp-mortgage-fees").lastChild.nodeValue = formatCurrency(mortgageFeesMax);
+		document.getElementById("fp-total-cost").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax));
+	} else {
+		 $(".ci-info-box").prepend(boxFP);
+	}
 }
 
 // Read cookie (used for retrieving the analytics_id)
@@ -201,8 +205,9 @@ function logUserData () {
 	var analyticsID = readCookie("analytics_id");
 	var funnelData = sessionStorage.getItem('cggCore.formData');
 	var geoData = JSON.stringify(geoObject);
+	var emailConsent = $('input[name=consent]').prop("checked");
 	// add: second borrower, highlights
-	var serializedData = "funnelData="+funnelData+"&geoData="+geoData+"&analyticsID="+analyticsID;
+	var serializedData = "funnelData="+funnelData+"&geoData="+geoData+"&analyticsID="+analyticsID+"&emailConsent="+emailConsent;
 	request = $.ajax({
 		url: "https://script.google.com/macros/s/AKfycbzyMSvOpJVyYSkK42FPpWPZztoz4I2DNWpJKdNsL9Do-DuRvURZ/exec",
 		type: "post",
@@ -217,43 +222,26 @@ $( document ).ready(function() {
 	// Load funnel things
 	if(window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen")> -1 ) {
 		ipLookUp();
-		//	build and update financial plan elements on load
-		$(".ci-info-box").prepend(boxFP);
 		updateFP();
-
-		// FIME: wrong place! needs to load in step 2!
-		// Listen to events in the form
-		//let list = document.getElementsByName("propertyValue");
-		//list[0].addEventListener("click", function() {console.log( $.now()); });
-	//	$('input[type=radio][name=region]').click(function() { updateFP(); }); 
-	//	$('input').blur(function() { updateFP(); }); 
-		//could be generalized with $('input').change(function() { updateFP(); }); 
-	}
-	
-	// Load results table things
-	if(window.location.href.indexOf("results") > -1 ) {
-		console.log("Changing product labels to HypoConnect");
-		$('.banner-title.exclusive').text(locales[lang]['bannerLabel']);
-		$('.product-label').text(locales[lang]['bannerLabel']);
 	}
 	
 	var checkExist = setInterval(function() {
 		// binding to the input events is more cumbersome and unstable than refreshing periodically
 		updateFP();
 		
-		// apply HypoConnect branding
-		if(window.location.href.indexOf("step/4")+window.location.href.indexOf("step/5")+window.location.href.indexOf("step/6") > -1) {
+		// Apply HypoConnect branding
+		if (window.location.href.indexOf("step/4")+window.location.href.indexOf("step/5")+window.location.href.indexOf("step/6") > -1) {
 			$("body").addClass("hypoconnect");
 			if ($("#disclaimerHC").length == 0) {
-				$("[ng-switch-when='cgg-headline-description']").after('<span id="disclaimerHC" style="font-style:italic">'+locales[lang]['disclaimerTopHC']+'<br></span>')
+				$("[ng-switch-when='cgg-headline-description']").after('<span id="disclaimerHC" style="display: block; margin: -10px 0 20px 0">'+locales[lang]['disclaimerTopHC']+'<br></span>')
 			}
 			$("application-skip-link").text(locales[lang]['disclaimerBottomHC']);
 		} else {
 			$("body").removeClass("hypoconnect");
 		}
 		
-		// notify for employment special cases
-		if(window.location.href.indexOf("step/6") > -1 && $("#highlightEmploymentStatus").length == 0) {
+		// Notify for employment special cases
+		if (window.location.href.indexOf("step/6") > -1 && $("#highlightEmploymentStatus").length == 0) {
 			$('select[name="employmentStatus"]').parent().after(highlightEmploymentStatus);
 		}
 		if (/independent|liberal_professional|company_manager/.test($('select[name="employmentStatus"] option:selected').val()) ) {
@@ -262,12 +250,11 @@ $( document ).ready(function() {
 			$("#highlightEmploymentStatus").addClass("ng-hide");	
 		}
 		
-		// notify for LTV > 100%
-		if(window.location.href.indexOf("step/2") > -1 && $("#highlightLTV").length == 0) {
+		// Notify for LTV > 100%
+		if (window.location.href.indexOf("step/2") > -1 && $("#highlightLTV").length == 0) {
 			$('input[name="ownFunds"]').parent().parent().parent().parent().after(highlightLTV);
 		}
-
-		if ( totalAmount/propertyValue > 1.05 ) {
+		if ($('input[name=ownFunds]').val() != "" && totalAmount/propertyValue > 1.05) {
 			$("#highlightLTV").removeClass("ng-hide");
 			//TODO: store the information in a cookie to pass over to unbounce
 		} else {
@@ -275,12 +262,40 @@ $( document ).ready(function() {
 			//TODO: remove the information from the above cookie
 		}
 		
-		if(window.location.href.indexOf("step/7") > -1 ) {
+		// Pre-fill the income/expenses fields with default amounts (O EUR)
+		if (window.location.href.indexOf("step/4") > -1) {
+			if ($('input[name=monthlyIncome]').val() == "" && !$('input[name=monthlyIncome]').first().is(":focus")) { $('input[name=monthlyIncome]').val(0); $('input[name=monthlyIncome]' ).change();}  
+			if ($('input[name=pensionsIncome]').val() == "" && !$('input[name=pensionsIncome]').first().is(":focus")) { $('input[name=pensionsIncome]').val(0); $('input[name=pensionsIncome]' ).change();} 
+			if ($('input[name=socialAllowance]').val() == "" && !$('input[name=socialAllowance]').first().is(":focus")) { $('input[name=socialAllowance]').val(0); $('input[name=socialAllowance]' ).change();} 
+		}
+		if (window.location.href.indexOf("step/5") > -1) {
+			if ($('input[name=monthlyLoans]').val() == "" && !$('input[name=monthlyLoans]').first().is(":focus")) { $('input[name=monthlyLoans]').val(0); $('input[name=monthlyLoans]' ).change();}  
+			if ($('input[name=monthlyRent]').val() == "" && !$('input[name=monthlyRent]').first().is(":focus")) { $('input[name=monthlyRent]').val(0); $('input[name=monthlyRent]' ).change();} 
+			if ($('input[name=monthlyMaintenance]').val() == "" && !$('input[name=monthlyMaintenance]').first().is(":focus")) { $('input[name=monthlyMaintenance]').val(0); $('input[name=monthlyMaintenance]' ).change();} 
+		}	
+		
+		if (window.location.href.indexOf("step/7") > -1) {
 		// use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
+			if ( $("application-step-template").children().last().children().children().last().length == 0) {
+				$("application-step-template").children().last().children().last().append(boxEmail);
+				$('input[name=consent]').click(function() {logUserData();});
+			}
 			if (jQuery._data($('input[name=email]')[0], 'events')["blur"].length < 3 ) {
+				// consider removing this if the above works better
 				$('input[name=email]').blur(function() {logUserData();});
 			}
-			$("application-step-template").children().last().text(locales[lang]['disclaimerEmail']);
+		}
+		
+		// Load results table things
+		if(window.location.href.indexOf("results") > -1 ){
+			// Use the exclusive banner to mark the HypoConnect products
+			if ( $('.banner-title.exclusive').first().text() != locales[lang]['bannerLabel']) {
+				console.log("Changing product labels to HypoConnect");
+				$('.banner-title.exclusive').text(locales[lang]['bannerLabel']);
+				$('.product-label').text(locales[lang]['bannerLabel']);
+			}
+			// Add APR/TAEG assumption in the disclaimer
+			$(".cgg-category-disclaimer").html(locales[lang]['disclaimerResultsHC']);
 		}
 	
 	}, 100);
