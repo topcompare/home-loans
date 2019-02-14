@@ -489,7 +489,7 @@ $(document).ready(function() {
     }
 
     // Load results table things
-    if (window.location.href.indexOf("results") > -1) {
+    if (window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results")  > -1) {
       $("body").addClass("hl-rt");
       // Use the exclusive banner to mark the HypoConnect products
       if (
