@@ -105,12 +105,12 @@ body.hypoconnect application-skip-link {
 */
 
 @media (min-width: 991px) {
-  .product-name-container {
+  body.hl-rt .product-name-container {
     background-color: rgba(141, 22, 86, 0.15);
   }
 }
 
-.product-name-container .product-label {
+body.hl-rt .product-name-container .product-label {
   background-color: #8d1656 !important;
 }
 
@@ -120,21 +120,10 @@ body.hypoconnect application-skip-link {
   background-color: #fafafa !important;
 }
 
-.banner-title.exclusive {
+body.hl-rt .banner-title.exclusive {
   color: #8d1656 !important;
 }
 
-.footer-container {
+body.hl-rt .footer-container {
   background-color: #fafafa;
-}
-
-/*
-	Remove white borders from free content widget and make it behave like the above the fold
-*/
-.free-text > .container {
-  width: 100% !important;
-  padding: 0 !important;
-}
-.category-above-fold .above-fold-wrapper h1 {
-  font-size: 32px !important;
 }
