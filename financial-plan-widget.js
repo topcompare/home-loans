@@ -232,11 +232,7 @@ function computeFP() {
 // Transform the numbers in nice currency format
 function formatCurrency(num) {
   return (
-    "€ " +
-    num
-      .toFixed(0)
-      .replace(".", ",")
-      .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+    "€ " + num.toFixed().replace(".", ",").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
   );
 }
 
