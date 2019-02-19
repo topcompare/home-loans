@@ -127,3 +127,14 @@ body.hl-rt .banner-title.exclusive {
 body.hl-rt .footer-container {
   background-color: #fafafa;
 }
+
+/*
+	Provider pages: removal of unsupported content
+*/
+div#provider-details__product-contents-mg+.provider-block-product-contents__search-result{
+    display: none;
+}
+
+div#provider-details__product-contents-mg+.provider-block-product-contents__search-result+.provider-block-cc-portal{
+    display: none;
+}
