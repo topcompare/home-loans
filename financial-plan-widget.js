@@ -125,7 +125,7 @@ function getStaircaseRow(matrix, value) {
     if (matrix[i][0] - value > 0) {
       return i;
     } else if (value >= matrix[matrix.length - 1][0]) {
-      return i;
+      return matrix.length - 1;
     }
   }
 }
