@@ -123,7 +123,7 @@ var mortgageFixedRateCol = 2;
 function getStaircaseRow(matrix, value) {
   for (var i = 0; i < matrix.length; i++) {
     if (matrix[i][0] - value > 0) {
-      return i;
+      return i - 1;
     } else if (value >= matrix[matrix.length - 1][0]) {
       return matrix.length - 1;
     }
