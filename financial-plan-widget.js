@@ -65,9 +65,9 @@ var adminFeesMGMin = 700,
   adminFeesMGMax = 1000;
 var registrationRights,
   mortgageOfficeFees,
-  registrationFees,
-  notaryFeesMax,
-  mortgageFeesMax,
+  registrationFees = 0,
+  notaryFeesMax = 0,
+  mortgageFeesMax = 0,
   totalAmount,
   notaryVariablePercentage,
   notaryFixedFee;
