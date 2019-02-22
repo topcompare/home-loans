@@ -395,7 +395,7 @@ $(document).ready(function() {
     }
 
     // Pre-fill the income/expenses fields with default amounts (O EUR)
-    if (window.location.href.indexOf("step/4") > -1) {
+/*    if (window.location.href.indexOf("step/4") > -1) {
       if (
         $("input[name=monthlyIncome]").val() == "" &&
         !$("input[name=monthlyIncome]")
@@ -453,7 +453,7 @@ $(document).ready(function() {
         $("input[name=monthlyMaintenance]").change();
       }
     }
-
+*/
     if (window.location.href.indexOf("step/7") > -1) {
       // use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
       if (
