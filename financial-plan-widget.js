@@ -334,9 +334,9 @@ $(document).ready(function() {
 
     // Apply HypoConnect branding
     if (
-      window.location.href.indexOf("step/4") +
-        window.location.href.indexOf("step/5") +
-        window.location.href.indexOf("step/6") >
+      window.location.href.indexOf("step/5") +
+        window.location.href.indexOf("step/6") +
+        window.location.href.indexOf("step/7") >
       -1
     ) {
       $("body").addClass("hypoconnect");
@@ -354,7 +354,7 @@ $(document).ready(function() {
 
     // Notify for employment special cases
     if (
-      window.location.href.indexOf("step/6") > -1 &&
+      window.location.href.indexOf("step/7") > -1 &&
       $("#highlightEmploymentStatus").length == 0
     ) {
       $('select[name="employmentStatus"]')
@@ -373,7 +373,7 @@ $(document).ready(function() {
 
     // Notify for LTV > 100%
     if (
-      window.location.href.indexOf("step/2") > -1 &&
+      window.location.href.indexOf("step/3") > -1 &&
       $("#highlightLTV").length == 0
     ) {
       $('input[name="ownFunds"]')
@@ -454,7 +454,7 @@ $(document).ready(function() {
       }
     }
 */
-    if (window.location.href.indexOf("step/7") > -1) {
+    if (window.location.href.indexOf("step/8") > -1) {
       // use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
       if (
         $("application-step-template")
