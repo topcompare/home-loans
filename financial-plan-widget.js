@@ -181,7 +181,7 @@ function computeFP() {
     investmentInfo = formScope.getFormattedCurrentStepData(formScope.modelInfo.stepInfoContainer["borrowWithPercentageLocked"], "cggId", "gtmId");
 
     region = backTranslation[regionInfo.propertyRegion];
-    firstProperty = regionInfo.firstProperty;
+    firstProperty = backTranslation[regionInfo.firstProperty];
     if (investmentInfo.propertyValue) propertyValue = parseFloat(investmentInfo.propertyValue);
     if (investmentInfo.ownFunds) ownFunds = parseFloat(investmentInfo.ownFunds);
   }
