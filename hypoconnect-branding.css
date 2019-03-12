@@ -6,22 +6,9 @@
   display: none;
 }
 
-/* Financial plan styling. Make sure it does not unexpectedly affect other elements! */
-.radio-toolbar input[type="radio"] {
-  display: none;
-}
-.radio-toolbar label {
-  display: inline-block;
-  padding: 4px 11px;
-  margin: 0 10px 10px 0;
-  cursor: pointer;
-  width: 95px;
-  text-align: center;
-  border: 1px solid #77aa43;
-}
-.radio-toolbar input[type="radio"]:checked + label {
-  background-color: #77aa43;
-  color: #fff;
+/* Financial plan styling */
+#fp-loan-amount {
+  font-weight: bold;
 }
 
 /*
