@@ -377,24 +377,23 @@ $(document).ready(function() {
     }
 
     // Load results table things
-    if (
-      window.location.href.indexOf("pret-hypothecaire/tous/results") +
-        window.location.href.indexOf("hypothecaire-lening/alle/results") >
-      -1
-    ) {
+    if ( window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results") > -1 ) {
       $("body").addClass("hl-rt");
-      // Use the exclusive banner to mark the HypoConnect products
+      // Use the exclusiveity banner to mark the HypoConnect products
       if (
-        $(".banner-title.exclusive")
-          .first()
-          .text() != locales[lang]["bannerLabel"]
+        $(".banner-title.exclusive").first().text() != locales[lang]["bannerLabel"]
       ) {
-        console.log("Changing product labels to HypoConnect");
         $(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
         $(".product-label").text(locales[lang]["bannerLabel"]);
       }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
+
+      // Hide Flemish products on FR site
+      if (window.location.href.indexOf("pret-hypothecaire/tous/results") > -1) {
+        $('*[data-cgg-id^="EIHE00"]').hide();
+        $('*[data-cgg-id^="VSWX0"]').hide();
+      }
     }
   }, 100);
 });
