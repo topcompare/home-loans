@@ -11,8 +11,10 @@ var locales = {
     wallonia: "Wallonie",
     registrationRights: "Droits d'enregistrement",
     mortgageFees: "Frais liés au crédit hypothécaire",
-    notaryFees: "Frais de notaire",
+    notaryFees: "Frais de notaire liés à l'acte d'achat",
     totalCost: "Coût total du projet",
+    ownFunds: "- Fonds propres",
+    loanAmount: "Montant à emprunter",
     highlightEmploymentStatus:
       " Ce statut professionnel a des conditions spéciales pour les taux. Nous afficherons les taux standards mais le courtier sera informé de votre statut afin de vous proposer le meilleur taux.",
     highlightLTV:
@@ -34,8 +36,10 @@ var locales = {
     wallonia: "Wallonië",
     registrationRights: "Registratierechten",
     mortgageFees: "Hypotheekkosten",
-    notaryFees: "Notariskosten",
+    notaryFees: "Notariskosten voor de aankoop",
     totalCost: "Totale kosten van het project",
+    ownFunds: "- Persoonlijke bijdrage",
+    loanAmount: "Totaal lening",
     highlightEmploymentStatus:
       " Deze professionele status heeft speciale voorwaarden voor tarieven. Wij geven de standaardtarieven weer, maar de makelaar wordt op de hoogte gebracht van uw status om u het beste tarief aan te bieden.",
     highlightLTV:
@@ -53,24 +57,19 @@ var locales = {
 };
 
 var lang = "fr";
-var formData;
 var regionalFees = { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
-  region = "flanders";
+  region = "brussels";
 var notaryFixedCost = 2178;
-var adminFeesMin = 800,
-  adminFeesMax = 1100;
 var VAT = 1.21;
-var mortgageOfficeTrans = 230;
-var adminFeesMGMin = 700,
-  adminFeesMGMax = 1000;
-var registrationRights,
-  mortgageOfficeFees,
-  registrationFees = 0,
+var registrationFees = 0,
   notaryFeesMax = 0,
   mortgageFeesMax = 0,
   totalAmount,
   notaryVariablePercentage,
-  notaryFixedFee;
+  notaryFixedFee,
+  regionalDeduction = 0, 
+  firstProperty = false,
+  formScope, regionInfo, investmentInfo;
 var ownFunds = 0,
   propertyValue = 0;
 
@@ -132,7 +131,7 @@ function getStaircaseRow(matrix, value) {
 
 if (document.documentElement.lang == "nl-BE") {
   lang = "nl";
-  region = "flanders";
+//  region = "flanders";
 }
 
 /*
@@ -150,21 +149,19 @@ var highlightLTV =
 var boxFP =
   '<div class="info_up_half"> <span class="info_up_half--title ng-binding">' +
   locales[lang]["title"] +
-  '</span> </div><div class="info_down_half"><div class="radio-toolbar"><input type="radio" id="radio1" name="region" value="brussels" checked><label for="radio1">' +
-  locales[lang]["brussels"] +
-  '</label><input type="radio" id="radio2" name="region" value="flanders"><label for="radio2">' +
-  locales[lang]["flanders"] +
-  '</label><input type="radio" id="radio3" name="region" value="wallonia"><label for="radio3">' +
-  locales[lang]["wallonia"] +
-  '</label></div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Droits d\'enregistrement">' +
+  '</span> </div><div class="info_down_half"><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Droits d\'enregistrement">' +
   locales[lang]["registrationRights"] +
-  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-registration-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-registration-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
   locales[lang]["notaryFees"] +
-  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-notary-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-notary-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
   locales[lang]["mortgageFees"] +
-  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-mortgage-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding" title="Coût total du projet">' +
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-mortgage-fees"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div><div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
   locales[lang]["totalCost"] +
-  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-total-cost"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>...</div></span></div></div>';
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-total-cost"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span></div><div class="cgg-row ng-scope" > <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div> <span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
+  locales[lang]["ownFunds"] +
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-own-funds"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div > <div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
+  locales[lang]["loanAmount"] +
+  '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-loan-amount"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span></div></div >';
 var boxEmail =
   '<label style="font-weight: normal"><input type="checkbox" name="consent" style="margin-right: 5px">' +
   locales[lang]["disclaimerEmail"] +
@@ -176,57 +173,44 @@ SECTION: define formulas
 // Get data and compute the financial plan variables
 function computeFP() {
   // update the variables with the latest value
-  if ($("input[name=ownFunds]").val()) {
-    ownFunds = parseFloat(
-      $("input[name=ownFunds]")
-        .val()
-        .replace(/\D/g, "")
-    );
-    propertyValue = parseFloat(
-      $("input[name=propertyValue]")
-        .val()
-        .replace(/\D/g, "")
-    );
-  } else if (sessionStorage.getItem("cggCore.formData") !== null) {
-    formData = jQuery.parseJSON(sessionStorage.getItem("cggCore.formData"));
-    if (formData["propertyValue"])
-      propertyValue = parseFloat(formData["propertyValue"]);
-    if (formData["ownFunds"]) ownFunds = parseFloat(formData["ownFunds"]);
-  } else {
-    //we have a problem! It might happen that the funnel has stored the values but that there is nothing in cggCore.formData --> How can it be?
-    // do nothing, keep the value in the variables
-    //console.log("Warning: Cannot capture property value and own funds fields!");
-  }
-  if ($("input[name=region]:checked").val() != null) {
-    region = $("input[name=region]:checked").val();
+  var backTranslation = { Bruxelles: "brussels", Wallonie: "wallonia", Flandre: "flanders", yes: true, no: false }; // Funnel values are in French instead of English
+
+  if (typeof angular !== "undefined" && typeof angular.element(document.getElementsByName('FormService.form.funnelPageForm')).scope() !== "undefined") {
+    formScope = angular.element(document.getElementsByName('FormService.form.funnelPageForm')).scope();
+    regionInfo = formScope.getFormattedCurrentStepData(formScope.modelInfo.stepInfoContainer["regionAndTaxesInformation"], "cggId", "gtmId");
+    investmentInfo = formScope.getFormattedCurrentStepData(formScope.modelInfo.stepInfoContainer["borrowWithPercentageLocked"], "cggId", "gtmId");
+
+    region = backTranslation[regionInfo.propertyRegion];
+    firstProperty = regionInfo.firstProperty;
+    if (investmentInfo.propertyValue) propertyValue = parseFloat(investmentInfo.propertyValue);
+    if (investmentInfo.ownFunds) ownFunds = parseFloat(investmentInfo.ownFunds);
   }
 
   // compute the costs only if propertyValue is set (avoid showing costs before even starting the funnel)
   if (propertyValue) {
-    registrationFees = propertyValue * regionalFees[region];
+    if (region == "brussels" && firstProperty && propertyValue <= 500000) {
+      regionalDeduction = Math.min(propertyValue, 175000);
+    } else if (region == "flanders" && firstProperty && propertyValue <= 200000) {
+      regionalDeduction = Math.min(propertyValue, 80000);
+    } else if (region == "wallonia" && firstProperty) {
+      regionalDeduction = Math.min(propertyValue, 20000);
+    } else {
+      regionalDeduction = 0;
+    }
 
-    notaryFixedFee =
-      notaryMatrix[getStaircaseRow(notaryMatrix, propertyValue)][
-        notaryFixedRateCol
-      ] *
-        VAT +
-      notaryFixedCost;
-    notaryVariablePercentage =
-      notaryMatrix[getStaircaseRow(notaryMatrix, propertyValue)][
-        notaryPercentageCol
-      ] * VAT;
+    if (region == "flanders" && firstProperty) {
+      registrationFees = (propertyValue - regionalDeduction)* 0.07;
+    }else{
+      registrationFees = (propertyValue - regionalDeduction) * regionalFees[region];
+    }
+
+    notaryFixedFee = notaryMatrix[getStaircaseRow(notaryMatrix, propertyValue)][notaryFixedRateCol] * VAT + notaryFixedCost;
+    notaryVariablePercentage = notaryMatrix[getStaircaseRow(notaryMatrix, propertyValue)][notaryPercentageCol] * VAT;
+
     notaryFeesMax = propertyValue * notaryVariablePercentage + notaryFixedFee;
 
     totalAmount = propertyValue + notaryFeesMax + registrationFees - ownFunds;
-    mortgageFeesMax =
-      mortgageMatrix[getStaircaseRow(mortgageMatrix, totalAmount)][
-        mortgagePercentageCol
-      ] *
-        totalAmount +
-      mortgageMatrix[getStaircaseRow(mortgageMatrix, totalAmount)][
-        mortgageFixedRateCol
-      ] -
-      totalAmount;
+    mortgageFeesMax = mortgageMatrix[getStaircaseRow(mortgageMatrix, totalAmount)][mortgagePercentageCol] * totalAmount + mortgageMatrix[getStaircaseRow(mortgageMatrix, totalAmount)][mortgageFixedRateCol] - totalAmount;
   }
 }
 // Transform the numbers in nice currency format
@@ -241,23 +225,12 @@ function updateFP() {
   computeFP();
   // Check if financial plan DOM is present, otherwise build it. For some reason, it does not work in $().ready
   if (document.getElementById("fp-registration-fees") != null) {
-    document.getElementById(
-      "fp-registration-fees"
-    ).lastChild.nodeValue = formatCurrency(registrationFees);
-    document.getElementById(
-      "fp-notary-fees"
-    ).lastChild.nodeValue = formatCurrency(notaryFeesMax);
-    document.getElementById(
-      "fp-mortgage-fees"
-    ).lastChild.nodeValue = formatCurrency(mortgageFeesMax);
-    document.getElementById(
-      "fp-total-cost"
-    ).lastChild.nodeValue = formatCurrency(
-      propertyValue +
-        parseFloat(registrationFees) +
-        parseFloat(notaryFeesMax) +
-        parseFloat(mortgageFeesMax)
-    );
+    document.getElementById("fp-registration-fees").lastChild.nodeValue = formatCurrency(registrationFees);
+    document.getElementById("fp-notary-fees").lastChild.nodeValue = formatCurrency(notaryFeesMax);
+    document.getElementById("fp-mortgage-fees").lastChild.nodeValue = formatCurrency(mortgageFeesMax);
+    document.getElementById("fp-total-cost").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) );
+    document.getElementById("fp-own-funds").lastChild.nodeValue = formatCurrency(-ownFunds);
+    document.getElementById("fp-loan-amount").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) - ownFunds);
   } else {
     $(".ci-info-box").prepend(boxFP);
   }
@@ -319,11 +292,7 @@ SECTION: Loaders
 */
 $(document).ready(function() {
   // Load funnel things
-  if (
-    window.location.href.indexOf("etapes") +
-      window.location.href.indexOf("stappen") >
-    -1
-  ) {
+  if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
     ipLookUp();
     updateFP();
   }
@@ -332,13 +301,14 @@ $(document).ready(function() {
     // binding to the input events is more cumbersome and unstable than refreshing periodically
     updateFP();
 
+    // Hide back button in step 2 for as long as there is no other purpose
+    if (window.location.href.indexOf("step/2") > - 1 ) {
+      if ($(".go-back-button.ng-scope").is(":visible")) $(".go-back-button.ng-scope").hide();
+    } else {
+      $(".go-back-button.ng-scope").show();
+    }
     // Apply HypoConnect branding
-    if (
-      window.location.href.indexOf("step/5") +
-        window.location.href.indexOf("step/6") +
-        window.location.href.indexOf("step/7") >
-      -1
-    ) {
+    if (window.location.href.indexOf("step/5") + window.location.href.indexOf("step/6") + window.location.href.indexOf("step/7") > -1 ) {
       $("body").addClass("hypoconnect");
       if ($("#disclaimerHC").length == 0) {
         $("[ng-switch-when='cgg-headline-description']").after(
@@ -353,10 +323,7 @@ $(document).ready(function() {
     }
 
     // Notify for employment special cases
-    if (
-      window.location.href.indexOf("step/7") > -1 &&
-      $("#highlightEmploymentStatus").length == 0
-    ) {
+    if ( window.location.href.indexOf("step/7") > -1 && $("#highlightEmploymentStatus").length == 0 ) {
       $('select[name="employmentStatus"]')
         .parent()
         .after(highlightEmploymentStatus);
@@ -376,12 +343,7 @@ $(document).ready(function() {
       window.location.href.indexOf("step/3") > -1 &&
       $("#highlightLTV").length == 0
     ) {
-      $('input[name="ownFunds"]')
-        .parent()
-        .parent()
-        .parent()
-        .parent()
-        .after(highlightLTV);
+      $('input[name="ownFunds"]').parent().parent().parent().parent().after(highlightLTV);
     }
     if (
       $("input[name=ownFunds]").val() != "" &&
@@ -394,82 +356,12 @@ $(document).ready(function() {
       //TODO: remove the information from the above cookie
     }
 
-    // Pre-fill the income/expenses fields with default amounts (O EUR)
-/*    if (window.location.href.indexOf("step/4") > -1) {
-      if (
-        $("input[name=monthlyIncome]").val() == "" &&
-        !$("input[name=monthlyIncome]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=monthlyIncome]").val(0);
-        $("input[name=monthlyIncome]").change();
-      }
-      if (
-        $("input[name=pensionsIncome]").val() == "" &&
-        !$("input[name=pensionsIncome]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=pensionsIncome]").val(0);
-        $("input[name=pensionsIncome]").change();
-      }
-      if (
-        $("input[name=socialAllowance]").val() == "" &&
-        !$("input[name=socialAllowance]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=socialAllowance]").val(0);
-        $("input[name=socialAllowance]").change();
-      }
-    }
-    if (window.location.href.indexOf("step/5") > -1) {
-      if (
-        $("input[name=monthlyLoans]").val() == "" &&
-        !$("input[name=monthlyLoans]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=monthlyLoans]").val(0);
-        $("input[name=monthlyLoans]").change();
-      }
-      if (
-        $("input[name=monthlyRent]").val() == "" &&
-        !$("input[name=monthlyRent]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=monthlyRent]").val(0);
-        $("input[name=monthlyRent]").change();
-      }
-      if (
-        $("input[name=monthlyMaintenance]").val() == "" &&
-        !$("input[name=monthlyMaintenance]")
-          .first()
-          .is(":focus")
-      ) {
-        $("input[name=monthlyMaintenance]").val(0);
-        $("input[name=monthlyMaintenance]").change();
-      }
-    }
-*/
     if (window.location.href.indexOf("step/8") > -1) {
       // use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
       if (
-        $("application-step-template")
-          .children()
-          .last()
-          .children()
-          .children()
-          .last().length == 0
+        $("application-step-template").children().last().children().children().last().length == 0
       ) {
-        $("application-step-template")
-          .children()
-          .last()
-          .children()
-          .last()
-          .append(boxEmail);
+        $("application-step-template").children().last().children().last().append(boxEmail);
         $("input[name=consent]").click(function() {
           logUserData();
         });
@@ -485,7 +377,11 @@ $(document).ready(function() {
     }
 
     // Load results table things
-    if (window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results")  > -1) {
+    if (
+      window.location.href.indexOf("pret-hypothecaire/tous/results") +
+        window.location.href.indexOf("hypothecaire-lening/alle/results") >
+      -1
+    ) {
       $("body").addClass("hl-rt");
       // Use the exclusive banner to mark the HypoConnect products
       if (
