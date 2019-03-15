@@ -17,6 +17,7 @@
 
 body.hypoconnect {
   background-color: #e0edee;
+  transition: 0.8s;
 }
 body.hypoconnect .cgg-progress__bar {
   background-color: #8d1656 !important;
