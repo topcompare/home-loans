@@ -278,7 +278,9 @@ function logUserData() {
     "&analyticsID=" +
     analyticsID +
     "&emailConsent=" +
-    emailConsent;
+    emailConsent +
+    "&lang=" +
+    lang;
   request = $.ajax({
     url:
       "https://script.google.com/macros/s/AKfycbzyMSvOpJVyYSkK42FPpWPZztoz4I2DNWpJKdNsL9Do-DuRvURZ/exec",
