@@ -390,12 +390,6 @@ $(document).ready(function() {
       }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
-
-      // Hide Flemish products on FR site
-      if (window.location.href.indexOf("pret-hypothecaire/tous/results") > -1) {
-        $('*[data-cgg-id^="EIHE00"]').hide();
-        $('*[data-cgg-id^="VSWX0"]').hide();
-      }
     }
   }, 100);
 });
