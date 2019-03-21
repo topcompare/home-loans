@@ -25,8 +25,6 @@ var locales = {
       "Cette page, qui est sous la responsabilité de HypoConnect NV, est hébergée par TopCompare Information Services Belgium.",
     disclaimerResultsHC:
       "Cet aperçu des produits est hébergé par TopCompare Information Services Belgium BVBA. HypoConnect NV propose des produits de banques disponibles via courtier (couleur mauve), indiquant votre probabilité d'éligibilité et un TAEG adapté selon vos informations personnelles et financières. Toute indication du TAEG ou de la probabilité d'éligibilité n'est pas contraignante, les conditions finales de la souscription au crédit hypothécaire sont la responsabilité ultime de la banque. TopCompare Information Services Belgium BVBA propose des produits de banques disponibles sans courtier, en utilisant uniquement les informations relatives à votre projet hypothécaire. Le calcul du TAEG présenté dans le tableau de résultats se fonde sur les hypothèses et montants suivants:<br>- le montant total des intérêts qui sont payés ;<br>- les frais de dossier entre 0 et 500 EUR en fonction de la banque ;<br>- les frais d’expertise d'une valeur moyenne de 250 EUR pour faire estimer la valeur de votre habitation par un expert ;<br>- les frais de notaire (autres que les honoraires) estimés pour l’établissement d’une inscription hypothécaire totale du montant de votre prêt ;<br>- la prime unique d’assurance solde restant dû,calculée sur base du taux sur le marché pour une personne non fumeur de 30 ans;<br>- le total des primes d’assurance habitation en tant que propriétaire, la prime annuelle moyenne du marché étant estimée à 320 EUR pour une habitation standard.",
-    disclaimerEmail:
-      "En procédant au tableau de résultats, j'accepte explicitement que TopCompare réutilise les données précédemment complétées à des fins marketing et de future comparaison.",
     bannerLabel: "HypoConnect"
   },
   nl: {
@@ -50,8 +48,6 @@ var locales = {
       "Deze webpagina, die onder de verantwoordelijkheid van HypoConnect NV valt, wordt gehost door TopCompare Information Services Belgium.",
     disclaimerResultsHC:
       "Dit productoverzicht wordt gehost door TopCompare Information Services Belgium BVBA. HypoConnect NV beschikt over producten van makelaarsbanken (paarse kleur) die uw waarschijnlijkheid van goedkeuring en een meer gepersonaliseerde JKP met behulp van uw persoonlijke en financiële informatie aangeven. Elke indicatie van een JKP of waarschijnlijkheid van goedkeuring is niet bindend, de uiteindelijke voorwaarden zijn de verantwoordelijkheid van de bank. TopCompare Information Services Belgium BVBA bevat producten van niet-makelaarsbanken en gebruikt alleen de informatie over uw hypotheekproject voor dit doel. Het jaarlijks kostenpercentage (JKP) vertegenwoordigt de kostprijs van de lening op jaarbasis en houdt rekening met de verschillende kosten verbonden aan een hypothecaire lening. De berekening van het JKP in de resultatentabel is gebaseerd op de volgende veronderstellingen en bedragen:<br>- het totale bedrag aan rente dat wordt betaald;<br>- de administratieve kosten tussen 0 en 500 EUR, afhankelijk van de bank;<br>- de kosten van een expertiseschatting met een gemiddelde waarde van 250 EUR om de waarde van uw woning door een expert te laten schatten;<br>- de geschatte notariskosten (andere dan honoraria) voor het vaststellen van een totale hypotheekregistratie van het bedrag van uw lening;<br>- de eenmalige premie voor de schuldsaldoverzekering, berekend op basis van het markttarief voor een niet-roker van 30 jaar;<br>- de totale woningverzekeringspremies als eigenaar, waarbij de gemiddelde jaarlijkse marktpremie wordt geschat op 320 euro voor een standaardwoning.",
-    disclaimerEmail:
-      "Door naar de resultatentabel te gaan, accepteer ik uitdrukkelijk dat TopCompare de eerder ingevulde gegevens opnieuw gebruikt voor marketing en toekomstige vergelijkingen.",
     bannerLabel: "HypoConnect"
   }
 };
@@ -162,10 +158,6 @@ var boxFP =
   '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-own-funds"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div > <div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
   locales[lang]["loanAmount"] +
   '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-loan-amount"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span></div></div >';
-var boxEmail =
-  '<label style="font-weight: normal"><input type="checkbox" name="consent" style="margin-right: 5px">' +
-  locales[lang]["disclaimerEmail"] +
-  "</label>";
 
 /*
 SECTION: define formulas
@@ -309,8 +301,9 @@ $(document).ready(function() {
     } else {
       $(".go-back-button.ng-scope").show();
     }
+    
     // Apply HypoConnect branding
-    if (window.location.href.indexOf("step/5") + window.location.href.indexOf("step/6") + window.location.href.indexOf("step/7") > -1 ) {
+    if (window.location.href.indexOf("step/4") + window.location.href.indexOf("step/5") + window.location.href.indexOf("step/6") > -1 ) {
       $("body").addClass("hypoconnect");
       if ($("#disclaimerHC").length == 0) {
         $("[ng-switch-when='cgg-headline-description']").after(
@@ -326,14 +319,9 @@ $(document).ready(function() {
 
     // Notify for employment special cases
     if ( window.location.href.indexOf("step/7") > -1 && $("#highlightEmploymentStatus").length == 0 ) {
-      $('select[name="employmentStatus"]')
-        .parent()
-        .after(highlightEmploymentStatus);
+      $('select[name="employmentStatus"]').parent().after(highlightEmploymentStatus);
     }
-    if (
-      /independent|liberal_professional|company_manager/.test(
-        $('select[name="employmentStatus"] option:selected').val()
-      )
+    if ( /independent|liberal_professional|company_manager/.test($('select[name="employmentStatus"] option:selected').val() )
     ) {
       $("#highlightEmploymentStatus").removeClass("ng-hide");
     } else {
@@ -341,16 +329,10 @@ $(document).ready(function() {
     }
 
     // Notify for LTV > 100%
-    if (
-      window.location.href.indexOf("step/3") > -1 &&
-      $("#highlightLTV").length == 0
-    ) {
+    if (      window.location.href.indexOf("step/3") > -1 && $("#highlightLTV").length == 0    ) {
       $('input[name="ownFunds"]').parent().parent().parent().parent().after(highlightLTV);
     }
-    if (
-      $("input[name=ownFunds]").val() != "" &&
-      totalAmount / propertyValue > 1.05
-    ) {
+    if (      $("input[name=ownFunds]").val() != "" && totalAmount / propertyValue > 1.05    ) {
       $("#highlightLTV").removeClass("ng-hide");
       //TODO: store the information in a cookie to pass over to unbounce
     } else {
@@ -360,21 +342,8 @@ $(document).ready(function() {
 
     if (window.location.href.indexOf("step/8") > -1) {
       // use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
-      if (
-        $("application-step-template").children().last().children().children().last().length == 0
-      ) {
-        $("application-step-template").children().last().children().last().append(boxEmail);
-        $("input[name=consent]").click(function() {
-          logUserData();
-        });
-      }
-      if (
-        jQuery._data($("input[name=email]")[0], "events")["blur"].length < 3
-      ) {
-        // consider removing this if the above works better
-        $("input[name=email]").blur(function() {
-          logUserData();
-        });
+      if ( jQuery._data($("input[name=email]")[0], "events")["blur"].length < 3 ) {
+        $("input[name=email]").blur(function() { logUserData(); });
       }
     }
 
@@ -390,6 +359,11 @@ $(document).ready(function() {
       }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
+      
+      // Hide NL products in FR table
+      $('*[data-cgg-id^="EIHE00"]').hide();
+      $('*[data-cgg-id^="VSWX0"]').hide();
+      $('*[data-cgg-id^="EIHU"]').hide();
     }
   }, 100);
 });
