@@ -359,11 +359,7 @@ $(document).ready(function() {
       }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
-      
-      // Hide NL products in FR table
-      $('*[data-cgg-id^="EIHE00"]').hide();
-      $('*[data-cgg-id^="VSWX0"]').hide();
-      $('*[data-cgg-id^="EIHU"]').hide();
+  
     }
   }, 100);
 });
