@@ -94,7 +94,7 @@ body.hypoconnect application-skip-link {
 
 @media (min-width: 991px) {
   body.hl-rt .product-name-container {
-    background-color: rgba(141, 22, 86, 0.15);
+   /* background-color: rgba(141, 22, 86, 0.15); */
   }
 }
 
