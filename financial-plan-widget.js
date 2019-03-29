@@ -355,7 +355,7 @@ $(document).ready(function() {
         $(".banner-title.exclusive").first().text() != locales[lang]["bannerLabel"]
       ) {
         $(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
-        $(".product-label").text(locales[lang]["bannerLabel"]);
+        $(".product-label:contains('TopCompare')").text(locales[lang]["bannerLabel"]);
       }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
