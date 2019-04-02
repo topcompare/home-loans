@@ -93,22 +93,22 @@ body.hypoconnect application-skip-link {
 */
 
 @media (min-width: 991px) {
-  body.hl-rt .product-name-container .hc-branding {
+  body.hl-rt .product-name-container {
     background-color: rgba(141, 22, 86, 0.15);
   }
 }
-/*
+
 body.hl-rt .product-name-container .product-label {
   background-color: #8d1656 !important;
 }
-*/
+
 .score-ranking-medium,
 .score-ranking-high,
 .score-ranking-low {
   background-color: #fafafa !important;
 }
 
-body.hl-rt .banner-title.exclusive {
+body.hl-rt .banner-title.exclusive .hc-branding {
   color: #8d1656 !important;
 }
 
