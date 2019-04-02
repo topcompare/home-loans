@@ -351,11 +351,18 @@ $(document).ready(function() {
     if ( window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results") > -1 ) {
       $("body").addClass("hl-rt");
       // Use the exclusiveity banner to mark the HypoConnect products
-      if ( $(".banner-title.exclusive").first().text() != locales[lang]["bannerLabel"] ) {
-        $(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
-        $(".product-label:contains('TopCompare')").text(locales[lang]["bannerLabel"]);
-        $(".product-label:contains('HypoConnect')").parent().parent().css('background', 'rgba(141, 22, 86, 0.15)');
-      }
+      if (!$(".results-container").hasClass("tc-touched")) {
+        for (var i =0; i< $(".card-container").length; i++) {
+          if($(".card-container").eq(i).find(".product-label:contains('Excl')").length) {
+            $(".card-container").eq(i).find(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
+            $(".card-container").eq(i).find(".product-label:contains('Exclu')").text(locales[lang]["bannerLabel"]);
+            $(".card-container").eq(i).find(".product-label:contains('HypoConnect')").parent().parent().css('background', 'rgba(141, 22, 86, 0.15)');
+          }else{
+            $(".card-container").eq(i).find(".product-label").get(0).setAttribute("style", "background-color: transparent !important");
+          }
+        }
+        $(".results-container").addClass("tc-touched");
+      } 
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
   
