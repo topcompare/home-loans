@@ -303,7 +303,7 @@ $(document).ready(function() {
       $("body").addClass("hl-rt");
       
       // Use the exclusivity banner to mark the HypoConnect products
-      if (!$(".results-container").hasClass("tc-touched")) {
+      if (!$(".results-container").hasClass("tc-touched") && $(".card-container").length) {
         for (var i =0; i< $(".card-container").length; i++) {
           if($(".card-container").eq(i).find(".product-label:contains('Excl')").length) {
                 $(".card-container").eq(i).find(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
