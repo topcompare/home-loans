@@ -350,19 +350,22 @@ $(document).ready(function() {
     // Load results table things
     if ( window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results") > -1 ) {
       $("body").addClass("hl-rt");
-      // Use the exclusiveity banner to mark the HypoConnect products
-      if (!$(".results-container").hasClass("tc-touched")) {
+      // Use the exclusivity banner to mark the HypoConnect products
+      if (!$(".results-container").hasClass("tc-touched") && $(".card-container").length) {
         for (var i =0; i< $(".card-container").length; i++) {
           if($(".card-container").eq(i).find(".product-label:contains('Excl')").length) {
             $(".card-container").eq(i).find(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
             $(".card-container").eq(i).find(".product-label:contains('Exclu')").text(locales[lang]["bannerLabel"]);
             $(".card-container").eq(i).find(".product-label:contains('HypoConnect')").parent().parent().css('background', 'rgba(141, 22, 86, 0.15)');
-          }else{
+          }else{ 
+            // remove little empty span element still visible
             $(".card-container").eq(i).find(".product-label").get(0).setAttribute("style", "background-color: transparent !important");
+            // hide apply button
+            $(".card-container").eq(i).find("button").hide();
           }
         }
         $(".results-container").addClass("tc-touched");
-      } 
+      }
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
   
