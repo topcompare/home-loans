@@ -240,54 +240,12 @@ function readCookie(name) {
   return null;
 }
 
-// Retrieve geolocation information and store in geoObject
-// Source:https://medium.com/@adeyinkaadegbenro/how-to-detect-the-location-of-your-websites-visitor-using-javascript-92f9e91c095f
-// providers: https://ipinfo.io/json (works fine but inaccurate), https://geoip-db.com/jsonp (works with proper ajax call and accurate enough), http://ip-api.com/ (most accurate but cannot call over https)
-var geoObject;
-function ipLookUp() {
-  $.ajax({
-    url: "https://geoip-db.com/jsonp",
-    jsonpCallback: "callback",
-    dataType: "jsonp",
-    success: function(location) {
-      geoObject = location;
-    }
-  });
-}
-
-// Capture information (source: https://gist.github.com/mhawksey/1276293)
-function logUserData() {
-  var analyticsID = readCookie("analytics_id");
-  var funnelData = sessionStorage.getItem("cggCore.formData");
-  var geoData = JSON.stringify(geoObject);
-  var emailConsent = $("input[name=consent]").prop("checked");
-  // add: second borrower, highlights
-  var serializedData =
-    "funnelData=" +
-    funnelData +
-    "&geoData=" +
-    geoData +
-    "&analyticsID=" +
-    analyticsID +
-    "&emailConsent=" +
-    emailConsent +
-    "&lang=" +
-    lang;
-  request = $.ajax({
-    url:
-      "https://script.google.com/macros/s/AKfycbzyMSvOpJVyYSkK42FPpWPZztoz4I2DNWpJKdNsL9Do-DuRvURZ/exec",
-    type: "post",
-    data: serializedData
-  });
-}
-
 /*
 SECTION: Loaders
 */
 $(document).ready(function() {
   // Load funnel things
   if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
-    ipLookUp();
     updateFP();
   }
 
@@ -329,10 +287,10 @@ $(document).ready(function() {
     }
 
     // Notify for LTV > 100%
-    if (      window.location.href.indexOf("step/3") > -1 && $("#highlightLTV").length == 0    ) {
+    if ( window.location.href.indexOf("step/3") > -1 && $("#highlightLTV").length == 0 ) {
       $('input[name="ownFunds"]').parent().parent().parent().parent().after(highlightLTV);
     }
-    if (      $("input[name=ownFunds]").val() != "" && totalAmount / propertyValue > 1.05    ) {
+    if ( $("input[name=ownFunds]").val() != "" && totalAmount / propertyValue > 1.05 ) {
       $("#highlightLTV").removeClass("ng-hide");
       //TODO: store the information in a cookie to pass over to unbounce
     } else {
@@ -340,35 +298,30 @@ $(document).ready(function() {
       //TODO: remove the information from the above cookie
     }
 
-    if (window.location.href.indexOf("step/8") > -1) {
-      // use the blur event of the email field to trigger the logUserData function. In order to bind only once, make sure only bind if there is no more than the two default events binded to that field
-      if ( jQuery._data($("input[name=email]")[0], "events")["blur"].length < 3 ) {
-        $("input[name=email]").blur(function() { logUserData(); });
-      }
-    }
-
-    // Load results table things
+    // Load results table hacks
     if ( window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results") > -1 ) {
       $("body").addClass("hl-rt");
+      
       // Use the exclusivity banner to mark the HypoConnect products
       if (!$(".results-container").hasClass("tc-touched")) {
-        console.log("Applying changes for " + i + " out of " + $(".card-container").length);
         for (var i =0; i< $(".card-container").length; i++) {
           if($(".card-container").eq(i).find(".product-label:contains('Excl')").length) {
-                console.log("Processing HC connect card " + i  + " out of " + $(".card-container").length);
                 $(".card-container").eq(i).find(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
                 $(".card-container").eq(i).find(".product-label:contains('Exclu')").text(locales[lang]["bannerLabel"]);
                 $(".card-container").eq(i).find(".product-label:contains('HypoConnect')").parent().parent().css('background', 'rgba(141, 22, 86, 0.15)');
           }else{ 
-            console.log("Processing non-HC connect card " + i  + " out of " + $(".card-container").length);
+            // make sure the remaining empty span box is not visibile  
             $(".card-container").eq(i).find(".product-label").get(0).setAttribute("style", "background-color: transparent !important");
+            // hide the apply click button
             $(".card-container").eq(i).find("button").hide();
+            // remove the eligibility score and text
+            $(".card-container").eq(i).find(".footer-container img").show();
+            $(".card-container").eq(i).find(".footer-primary").hide();
           }
         }
         $(".results-container").addClass("tc-touched");
-      } else {
-        console.log("no change needed");
       }
+      
       // Add APR/TAEG assumption in the disclaimer
       $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
   
