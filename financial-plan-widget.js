@@ -315,7 +315,7 @@ $(document).ready(function() {
             // hide the apply click button
             $(".card-container").eq(i).find("button").hide();
             // remove the eligibility score and text
-            $(".card-container").eq(i).find(".footer-container img").show();
+            $(".card-container").eq(i).find(".footer-container img").hide();
             $(".card-container").eq(i).find(".footer-primary").hide();
           }
         }
