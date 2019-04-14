@@ -322,8 +322,8 @@ $(document).ready(function() {
         // Add APR/TAEG assumption in the disclaimer
         $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
         // trigger popup if there is not eligible product
-        if ($("#eligible-products").find(".card-holder").children().length = 0) {
-          if (lang == "nl") { _gscq.push(["show", 390379]); }          
+        if ($("#eligible-products").find(".card-holder").children().length == 0) {
+          if (lang == "nl") { _gscq.push(["show", 390380]); }          
           else { _gscq.push(["show", 390379]); }
         }
         
