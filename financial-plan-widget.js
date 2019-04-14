@@ -319,12 +319,18 @@ $(document).ready(function() {
             $(".card-container").eq(i).find(".footer-primary").hide();
           }
         }
+        // Add APR/TAEG assumption in the disclaimer
+        $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
+        // trigger popup if there is not eligible product
+        if ($("#eligible-products").find(".card-holder").children().length = 0) {
+          if (lang == "nl") { _gscq.push(["show", 390379]); }          
+          else { _gscq.push(["show", 390379]); }
+        }
+        
+        // set a class to tell it has been touched
         $("#eligible-products").addClass("tc-touched");
-      }
-      
-      // Add APR/TAEG assumption in the disclaimer
-      $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
-  
+      } 
     }
   }, 100);
+  
 });
