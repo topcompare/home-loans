@@ -22,9 +22,9 @@ var locales = {
     disclaimerTopHC:
       "Vos données seront envoyées à et traitées par HypoConnect SA, courtier en crédit hypothécaire, pour fournir un TAEG plus précis et une éligibilité préliminaire testée auprès des 15+ banques partenaires de HypoConnect. En soumettant votre recherche, vous donnez implicitement votre accord pour l’utilisation de vos données à ces fins. Après avoir soumis vos informations, vous aurez accès en temps réel aux taux personnalisés et votre éligibilité auprès de ces banques.",
     disclaimerBottomHC:
-      "Cette page, qui est sous la responsabilité de HypoConnect NV, est hébergée par TopCompare Information Services Belgium.",
+      "Cette page, qui est sous la responsabilité de HypoConnect SA, est hébergée par TopCompare Information Services Belgium.",
     disclaimerResultsHC:
-      "Cet aperçu des produits est hébergé par TopCompare Information Services Belgium BVBA. HypoConnect NV propose des produits de banques disponibles via courtier (couleur mauve), indiquant votre probabilité d'éligibilité et un TAEG adapté selon vos informations personnelles et financières. Toute indication du TAEG ou de la probabilité d'éligibilité n'est pas contraignante, les conditions finales de la souscription au crédit hypothécaire sont la responsabilité ultime de la banque. TopCompare Information Services Belgium BVBA propose des produits de banques disponibles sans courtier, en utilisant uniquement les informations relatives à votre projet hypothécaire. Le calcul du TAEG présenté dans le tableau de résultats se fonde sur les hypothèses et montants suivants:<br>- le montant total des intérêts qui sont payés ;<br>- les frais de dossier entre 0 et 500 EUR en fonction de la banque ;<br>- les frais d’expertise d'une valeur moyenne de 250 EUR pour faire estimer la valeur de votre habitation par un expert ;<br>- les frais de notaire (autres que les honoraires) estimés pour l’établissement d’une inscription hypothécaire totale du montant de votre prêt ;<br>- la prime unique d’assurance solde restant dû,calculée sur base du taux sur le marché pour une personne non fumeur de 30 ans;<br>- le total des primes d’assurance habitation en tant que propriétaire, la prime annuelle moyenne du marché étant estimée à 320 EUR pour une habitation standard.",
+      "Cet aperçu des produits est hébergé par TopCompare Information Services Belgium BVBA. HypoConnect SA propose des produits de banques disponibles via courtier (couleur mauve), indiquant votre probabilité d'éligibilité et un TAEG adapté selon vos informations personnelles et financières. Toute indication du TAEG ou de la probabilité d'éligibilité n'est pas contraignante, les conditions finales de la souscription au crédit hypothécaire sont la responsabilité ultime de la banque. TopCompare Information Services Belgium BVBA propose des produits de banques disponibles sans courtier, en utilisant uniquement les informations relatives à votre projet hypothécaire. Le calcul du TAEG présenté dans le tableau de résultats se fonde sur les hypothèses et montants suivants:<br>- le montant total des intérêts qui sont payés ;<br>- les frais de dossier entre 0 et 500 EUR en fonction de la banque ;<br>- les frais d’expertise d'une valeur moyenne de 250 EUR pour faire estimer la valeur de votre habitation par un expert ;<br>- les frais de notaire (autres que les honoraires) estimés pour l’établissement d’une inscription hypothécaire totale du montant de votre prêt ;<br>- la prime unique d’assurance solde restant dû,calculée sur base du taux sur le marché pour une personne non fumeur de 30 ans;<br>- le total des primes d’assurance habitation en tant que propriétaire, la prime annuelle moyenne du marché étant estimée à 320 EUR pour une habitation standard.",
     bannerLabel: "HypoConnect"
   },
   nl: {
@@ -56,6 +56,7 @@ var lang = "fr";
 var regionalFees = { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
   region = "brussels";
 var notaryFixedCost = 2178;
+const discountValue = 160353;
 var VAT = 1.21;
 var registrationFees = 0,
   notaryFeesMax = 0,
@@ -192,7 +193,9 @@ function computeFP() {
 
     if (region == "flanders" && firstProperty) {
       registrationFees = (propertyValue - regionalDeduction)* 0.07;
-    }else{
+    } else if (region == "wallonia" && regionInfo.useDiscountedFee) {
+    registrationFees = Math.max(regionalFees[region] * ( (propertyValue-discountValue) - regionalDeduction ) + 0.06 * Math.min(discountValue, propertyValue),0);
+    } else{
       registrationFees = (propertyValue - regionalDeduction) * regionalFees[region];
     }
 
