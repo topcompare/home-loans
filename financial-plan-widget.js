@@ -315,11 +315,13 @@ $(document).ready(function() {
           }else{ 
             // make sure the remaining empty span box is not visibile  
             $(".card-container").eq(i).find(".product-label").get(0).setAttribute("style", "background-color: transparent !important");
+            /* This part is now covered in the backend release of May-2nd 
             // hide the apply click button
             $(".card-container").eq(i).find("button").hide();
             // remove the eligibility score and text
             $(".card-container").eq(i).find(".footer-container img").hide();
             $(".card-container").eq(i).find(".footer-primary").hide();
+            */
           }
         }
         // Add APR/TAEG assumption in the disclaimer
