@@ -135,14 +135,6 @@ if (document.documentElement.lang == "nl-BE") {
 SECTION: Create DOM structure
 */
 // Prepare highlight boxes for exception cases
-var highlightEmploymentStatus =
-  '<div class="cgg-global-input--error-notification ng-binding ng-hide" ng-show="showErrorMessage" style="margin-top: -10px; margin-bottom: 10px" id="highlightEmploymentStatus"><span class="cgg-has-error-msg-icn m-cgg js-newsletter-submit-icon m-cgg-icon--warning"></span>' +
-  locales[lang]["highlightEmploymentStatus"] +
-  "</div>";
-var highlightLTV =
-  '<div class="cgg-global-input--error-notification ng-binding ng-hide" ng-show="showErrorMessage" style="margin-top: -10px; margin-bottom: 10px" id="highlightLTV"><span class="cgg-has-error-msg-icn m-cgg js-newsletter-submit-icon m-cgg-icon--warning"></span>' +
-  locales[lang]["highlightLTV"] +
-  "</div>";
 var boxFP =
   '<div class="info_up_half"> <span class="info_up_half--title ng-binding">' +
   locales[lang]["title"] +
