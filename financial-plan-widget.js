@@ -244,96 +244,12 @@ function readCookie(name) {
 }
 
 /*
-SECTION: Loaders
+SECTION: Loader
 */
 $(document).ready(function() {
   // Load funnel things
   if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
     updateFP();
   }
-
-  var checkExist = setInterval(function() {
-    // binding to the input events is more cumbersome and unstable than refreshing periodically
-    updateFP();
-
-    // Hide back button in step 2 for as long as there is no other purpose
-    if (window.location.href.indexOf("step/2") > - 1 ) {
-      if ($(".go-back-button.ng-scope").is(":visible")) $(".go-back-button.ng-scope").hide();
-    } else {
-      $(".go-back-button.ng-scope").show();
-    }
-    
-    // Apply HypoConnect branding
-    if (window.location.href.indexOf("step/4") + window.location.href.indexOf("step/5") + window.location.href.indexOf("step/6") > -1 ) {
-      $("body").addClass("hypoconnect");
-      if ($("#disclaimerHC").length == 0) {
-        $("[ng-switch-when='cgg-headline-description']").after(
-          '<span id="disclaimerHC" style="display: block; margin: -10px 0 20px 0">' +
-            locales[lang]["disclaimerTopHC"] +
-            "<br></span>"
-        );
-      }
-      $("application-skip-link").text(locales[lang]["disclaimerBottomHC"]);
-    } else {
-      $("body").removeClass("hypoconnect");
-    }
-
-    // Notify for employment special cases
-    if ( window.location.href.indexOf("step/7") > -1 && $("#highlightEmploymentStatus").length == 0 ) {
-      $('select[name="employmentStatus"]').parent().after(highlightEmploymentStatus);
-    }
-    if ( /independent|liberal_professional|company_manager/.test($('select[name="employmentStatus"] option:selected').val() )
-    ) {
-      $("#highlightEmploymentStatus").removeClass("ng-hide");
-    } else {
-      $("#highlightEmploymentStatus").addClass("ng-hide");
-    }
-
-    // Notify for LTV > 100%
-    if ( window.location.href.indexOf("step/3") > -1 && $("#highlightLTV").length == 0 ) {
-      $('input[name="ownFunds"]').parent().parent().parent().parent().after(highlightLTV);
-    }
-    if ( $("input[name=ownFunds]").val() != "" && totalAmount / propertyValue > 1.05 ) {
-      $("#highlightLTV").removeClass("ng-hide");
-      //TODO: store the information in a cookie to pass over to unbounce
-    } else {
-      $("#highlightLTV").addClass("ng-hide");
-      //TODO: remove the information from the above cookie
-    }
-
-    // Load results table hacks
-    if ( window.location.href.indexOf("pret-hypothecaire/tous/results") + window.location.href.indexOf("hypothecaire-lening/alle/results") > -1 ) {
-      $("body").addClass("hl-rt");
-      
-      // Use the exclusivity banner to mark the HypoConnect products
-      if (!$("#eligible-products").hasClass("tc-touched") && $(".card-container").length) {
-        for (var i =0; i< $(".card-container").length; i++) {
-          if($(".card-container").eq(i).find(".product-label:contains('Excl')").length) {
-                $(".card-container").eq(i).find(".banner-title.exclusive").text(locales[lang]["bannerLabel"]);
-                $(".card-container").eq(i).find(".product-label:contains('Exclu')").text(locales[lang]["bannerLabel"]);
-                $(".card-container").eq(i).find(".product-label:contains('HypoConnect')").parent().parent().css('background', 'rgba(141, 22, 86, 0.15)');
-          }else{ 
-            // make sure the remaining empty span box is not visibile  
-            $(".card-container").eq(i).find(".product-label").get(0).setAttribute("style", "background-color: transparent !important");
-            // hide the apply click button
-            $(".card-container").eq(i).find("button").hide();
-            // remove the eligibility score and text
-            $(".card-container").eq(i).find(".footer-container img").hide();
-            $(".card-container").eq(i).find(".footer-primary").hide();         
-          }
-        }
-        // Add APR/TAEG assumption in the disclaimer
-        $(".cgg-category-disclaimer").html(locales[lang]["disclaimerResultsHC"]);
-        // trigger popup if there is not eligible product
-        if ($("#eligible-products").find(".card-holder").children().length == 0 && $('input[name="provider"]:checked').length == 0) {
-          if (lang == "nl") { _gscq.push(["show", 390380]); }          
-          else { _gscq.push(["show", 390379]); }
-        }
-        
-        // set a class to tell it has been touched
-        $("#eligible-products").addClass("tc-touched");
-      } 
-    }
-  }, 100);
   
 });
