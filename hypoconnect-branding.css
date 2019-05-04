@@ -126,3 +126,10 @@ div#provider-details__product-contents-mg+.provider-block-product-contents__sear
 div#provider-details__product-contents-mg+.provider-block-product-contents__search-result+.provider-block-cc-portal{
     display: none;
 }
+
+/*
+	Country specific css (from SEO header file)
+*/
+.credit-cards-landing>.item.active.cc .hero-carousel__item__details,.credit-cards-landing>.item.active.cc .row.hero-carousel__item__cta,.credit-cards-landing>.item.active.pl .hero-carousel__item__details,.credit-cards-landing>.item.active.pl .row.hero-carousel__item__cta{display:none}.credit-cards-landing>.item.active.cc .col-lg-7.col-md-7.col-sm-12.col-xs-12,.credit-cards-landing>.item.active.pl .col-lg-7.col-md-7.col-sm-12.col-xs-12{width:100%}.credit-cards-landing>.item.active.cc .container,.credit-cards-landing>.item.active.pl .container{background-image:none!important}.credit-cards-landing>.item.active.cc .hero-carousel__item__row.row,.credit-cards-landing>.item.active.pl .hero-carousel__item__row.row{padding-bottom:20px}.credit-cards-landing .top-banner{background-color:#056f9d!important}.credit-cards-landing>.item.active.cc .hero-carousel_item{border-bottom:0;color:#056f9d}@media (max-width:992px) and (min-width:481px){.credit-cards-landing>.item.active.cc #breadcrumbs span{color:#979290}}.credit-cards-landing>.item.active.pl .hero-carousel_item{border-bottom:0;color:#056f9d}@media (min-width:992px){.credit-cards-landing>.item.active.cc .col-lg-7.col-md-7.col-sm-12.col-xs-12,.credit-cards-landing>.item.active.pl .col-lg-7.col-md-7.col-sm-12.col-xs-12{padding-left:0}}@media (max-width:992px) and (min-width:481px){.credit-cards-landing>.item.active.pl #breadcrumbs span{color:#979290}}#breadcrumbs span.cgg-breadcrumbs-separator.m-cgg-icon--chevron-right { background: none; }
+
+.product-label.timeLimited{background-color: #e72564} .product-showcase{display: none;}.quotes-served{display:none}
