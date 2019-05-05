@@ -1,5 +1,3 @@
-var lang = document.documentElement.lang;
-
 /*
 SECTION: Set variables and base values
 */
@@ -14,18 +12,7 @@ var locales = {
     notaryFees: "Frais de notaire liés à l'acte d'achat",
     totalCost: "Coût total du projet",
     ownFunds: "- Fonds propres",
-    loanAmount: "Montant à emprunter",
-    highlightEmploymentStatus:
-      " Ce statut professionnel a des conditions spéciales pour les taux. Nous afficherons les taux standards mais le courtier sera informé de votre statut afin de vous proposer le meilleur taux.",
-    highlightLTV:
-      " Vous ne disposez pas de suffisamment de fonds propres pour financer votre projet. Peu de banques accordent un prêt hypothécaire avec une quotité  supérieure à 100%.",
-    disclaimerTopHC:
-      "Vos données seront envoyées à et traitées par HypoConnect SA, courtier en crédit hypothécaire, pour fournir un TAEG plus précis et une éligibilité préliminaire testée auprès des 15+ banques partenaires de HypoConnect. En soumettant votre recherche, vous donnez implicitement votre accord pour l’utilisation de vos données à ces fins. Après avoir soumis vos informations, vous aurez accès en temps réel aux taux personnalisés et votre éligibilité auprès de ces banques.",
-    disclaimerBottomHC:
-      "Cette page, qui est sous la responsabilité de HypoConnect SA, est hébergée par TopCompare Information Services Belgium.",
-    disclaimerResultsHC:
-      "Cet aperçu des produits est hébergé par TopCompare Information Services Belgium BVBA. HypoConnect SA propose des produits de banques disponibles via courtier (couleur mauve), indiquant votre probabilité d'éligibilité et un TAEG adapté selon vos informations personnelles et financières. Toute indication du TAEG ou de la probabilité d'éligibilité n'est pas contraignante, les conditions finales de la souscription au crédit hypothécaire sont la responsabilité ultime de la banque. TopCompare Information Services Belgium BVBA propose des produits de banques disponibles sans courtier, en utilisant uniquement les informations relatives à votre projet hypothécaire. Le calcul du TAEG présenté dans le tableau de résultats se fonde sur les hypothèses et montants suivants:<br>- le montant total des intérêts qui sont payés ;<br>- les frais de dossier entre 0 et 500 EUR en fonction de la banque ;<br>- les frais d’expertise d'une valeur moyenne de 250 EUR pour faire estimer la valeur de votre habitation par un expert ;<br>- les frais de notaire (autres que les honoraires) estimés pour l’établissement d’une inscription hypothécaire totale du montant de votre prêt ;<br>- la prime unique d’assurance solde restant dû,calculée sur base du taux sur le marché pour une personne non fumeur de 30 ans;<br>- le total des primes d’assurance habitation en tant que propriétaire, la prime annuelle moyenne du marché étant estimée à 320 EUR pour une habitation standard.",
-    bannerLabel: "HypoConnect"
+    loanAmount: "Montant à emprunter"
   },
   nl: {
     title: "Uw financieel plan",
@@ -37,26 +24,18 @@ var locales = {
     notaryFees: "Notariskosten voor de aankoop",
     totalCost: "Totale kosten van het project",
     ownFunds: "- Persoonlijke bijdrage",
-    loanAmount: "Totaal lening",
-    highlightEmploymentStatus:
-      " Deze professionele status heeft speciale voorwaarden voor tarieven. Wij geven de standaardtarieven weer, maar de makelaar wordt op de hoogte gebracht van uw status om u het beste tarief aan te bieden.",
-    highlightLTV:
-      " U beschikt niet over voldoende eigen vermogen om uw project te financieren. Weinig banken verstrekken een hypothecair krediet met een quotiteit hoger dan 100%. Wij geven de standaardtarieven weer, maar de makelaar wordt op de hoogte gebracht van uw situatie om u het beste tarief aan te bieden.",
-    disclaimerTopHC:
-      "Uw gegevens worden verzonden naar en verwerkt door HypoConnect hypotheekmakelaar om een nauwkeuriger JKP en voorlopige geschiktheid getest met de 15+ partner banken van HypoConnect. Door het indienen van uw simulatie gaat u impliciet akkoord met het gebruik van uw gegevens voor deze doeleinden. Na het invoeren van uw gegevens heeft u in realtime toegang tot gepersonaliseerde tarieven en uw geschiktheid bij deze banken",
-    disclaimerBottomHC:
-      "Deze webpagina, die onder de verantwoordelijkheid van HypoConnect NV valt, wordt gehost door TopCompare Information Services Belgium.",
-    disclaimerResultsHC:
-      "Dit productoverzicht wordt gehost door TopCompare Information Services Belgium BVBA. HypoConnect NV beschikt over producten van makelaarsbanken (paarse kleur) die uw waarschijnlijkheid van goedkeuring en een meer gepersonaliseerde JKP met behulp van uw persoonlijke en financiële informatie aangeven. Elke indicatie van een JKP of waarschijnlijkheid van goedkeuring is niet bindend, de uiteindelijke voorwaarden zijn de verantwoordelijkheid van de bank. TopCompare Information Services Belgium BVBA bevat producten van niet-makelaarsbanken en gebruikt alleen de informatie over uw hypotheekproject voor dit doel. Het jaarlijks kostenpercentage (JKP) vertegenwoordigt de kostprijs van de lening op jaarbasis en houdt rekening met de verschillende kosten verbonden aan een hypothecaire lening. De berekening van het JKP in de resultatentabel is gebaseerd op de volgende veronderstellingen en bedragen:<br>- het totale bedrag aan rente dat wordt betaald;<br>- de administratieve kosten tussen 0 en 500 EUR, afhankelijk van de bank;<br>- de kosten van een expertiseschatting met een gemiddelde waarde van 250 EUR om de waarde van uw woning door een expert te laten schatten;<br>- de geschatte notariskosten (andere dan honoraria) voor het vaststellen van een totale hypotheekregistratie van het bedrag van uw lening;<br>- de eenmalige premie voor de schuldsaldoverzekering, berekend op basis van het markttarief voor een niet-roker van 30 jaar;<br>- de totale woningverzekeringspremies als eigenaar, waarbij de gemiddelde jaarlijkse marktpremie wordt geschat op 320 euro voor een standaardwoning.",
-    bannerLabel: "HypoConnect"
+    loanAmount: "Totaal lening"
   }
 };
 
 var lang = "fr";
+if (document.documentElement.lang == "nl-BE") {
+  lang = "nl";
+}
 var regionalFees = { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
   region = "brussels";
 var notaryFixedCost = 2178;
-const discountValue = 160353;
+var discountValue = 160353;
 var VAT = 1.21;
 var registrationFees = 0,
   notaryFeesMax = 0,
@@ -117,6 +96,9 @@ var mortgagePercentageCol = 1;
 var mortgageFixedRateCol = 2;
 
 function getStaircaseRow(matrix, value) {
+  if (matrix[0][0] > value) {
+    return 0;
+  }
   for (var i = 0; i < matrix.length; i++) {
     if (matrix[i][0] - value > 0) {
       return i - 1;
@@ -124,11 +106,6 @@ function getStaircaseRow(matrix, value) {
       return matrix.length - 1;
     }
   }
-}
-
-if (document.documentElement.lang == "nl-BE") {
-  lang = "nl";
-//  region = "flanders";
 }
 
 /*
@@ -217,31 +194,22 @@ function updateFP() {
     document.getElementById("fp-mortgage-fees").lastChild.nodeValue = formatCurrency(mortgageFeesMax);
     document.getElementById("fp-total-cost").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) );
     document.getElementById("fp-own-funds").lastChild.nodeValue = formatCurrency(-ownFunds);
-    document.getElementById("fp-loan-amount").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) - ownFunds);
+    document.getElementById("fp-loan-amount").lastChild.nodeValue = formatCurrency(Math.max(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) - ownFunds, 0));
   } else {
     $(".ci-info-box").prepend(boxFP);
   }
-}
-
-// Read cookie (used for retrieving the analytics_id)
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
 }
 
 /*
 SECTION: Loader
 */
 $(document).ready(function() {
-  // Load funnel things
+  // Load FP only if we are in the funnel
   if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
     updateFP();
+	$("form :input").keydown(function() {
+		updateFP();
+	});
   }
   
 });
