@@ -116,6 +116,13 @@ body.hl-rt .footer-container {
   background-color: #fafafa;
 }
 
+/* Fix scaling eligiblity icon */
+@media (max-width: 992px) {
+    .footer-container img {
+        width: unset;
+    }
+}
+
 /*
 	Provider pages: removal of unsupported content
 */
