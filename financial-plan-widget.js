@@ -211,10 +211,14 @@ SECTION: Loader
 $(document).ready(function() {
   // Load FP only if we are in the funnel
   if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
-    updateFP();
+	updateFP();
+	// bind form change events to update the financial plan (probably too many events but need to be sure it works)
 	$("form :input").keydown(function() {
 		updateFP();
 	});
+	$('form').bind('DOMSubtreeModified', function(e) {
+      		updateFP();
+  	});
   }
   
 });
