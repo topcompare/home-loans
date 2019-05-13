@@ -1,3 +1,8 @@
+/* This is a custom script and contains the following features:
+- Adds a financial plan on the right pane of the funnel (desktop only)
+- Is being loaded with GTM and updates on every form input keystroke
+*/
+
 /*
 SECTION: Set variables and base values
 */
