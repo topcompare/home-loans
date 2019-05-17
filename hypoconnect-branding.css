@@ -146,11 +146,11 @@ body.hl-rt .footer-container {
 
 /* Remove amount slider labels */
 .range-limit-container {
-    display: none;
+    display: none !important;
 }
 .slider-set {
-    height: unset;
-    padding-bottom: 10px;
+    height: unset !important;
+    padding-bottom: 10px !important;
 }
 
 /* START SECTION FORMATTING AND TITLES*/
@@ -185,7 +185,7 @@ body.hl-rt .footer-container {
     content: 'Leningen waarvoor je voorlopig  bent goedgekeurd';
 }
 :lang(fr) #results-container div#eligible-products .card-holder:first-child:before {
-    content: 'Nous avons vérifié votre éligibilité auprès de ces banque et le taux que vous pouvez obtenir avec les informations que vous nous avez fournies. [CTA?]';
+    content: 'Nous avons vérifié votre éligibilité auprès de ces banque et le taux que vous pouvez obtenir avec les informations que vous nous avez fournies.';
 }
 :lang(nl) #results-container div#eligible-products .card-holder:first-child:before {
     content: 'Description of what the eligible criteria means.';
