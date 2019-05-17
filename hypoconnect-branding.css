@@ -4,8 +4,9 @@
 - Funnel: Styles the financial plan widget
 - Results table: Fixes the scaling of eligiblity icon in the results table
 - Results table: Adds style to HC products (identified with the banner)
+- Results table: Add eligibility section titles and formatting
+- Results table: Remove labels from amount sliders
 - Provider pages: Removes unsupported content
-- Other: Country specific css (formerly in the SEO header file)
 */
 
 /* 
@@ -133,6 +134,311 @@ body.hl-rt .footer-container {
     }
 }
 
+/* Hide the column that contains the total reimbursement amount */
+.metrics>div:nth-of-type(2) {
+    display: none !important;
+}
+
+/* Remove footer information on eligibility for non-eligible products (as the section title is explicity enough)*/
+.footer-container.score-ranking-no_chance > div > * > img, .footer-container.score-ranking-no_chance > div > * >.footer-primary {
+    display: none;
+}
+
+/* Remove amount slider labels */
+.range-limit-container {
+    display: none;
+}
+.slider-set {
+    height: unset;
+    padding-bottom: 10px;
+}
+
+/* START SECTION FORMATTING AND TITLES*/
+#results-container .cards-container {padding-top: 0px;}
+
+/* Padding for sections */
+#results-container .cards-container#unknown-eligibility-products {padding-top: 24px;}
+#results-container .cards-container#eligible-under-conditions-products {padding-top: 24px;}
+
+/* Margin between products */
+.card-holder .card-container{margin: 16px 0 !important;}
+
+
+/* Eligible */
+#results-container div#eligible-products:before {
+    font-size: 24px;
+    font-weight: bold;
+    color: #076B9C;
+    line-height: 1.5;
+}
+
+#results-container div#eligible-products .card-holder:first-child:before {
+    font-size:16px;
+    line-height: 1.5;
+    color: #312F2E;
+}
+
+:lang(fr) #results-container div#eligible-products:before {
+    content: 'Vos prêts hypothécaires préacceptés';
+}
+:lang(nl) #results-container div#eligible-products:before {
+    content: 'Leningen waarvoor je voorlopig  bent goedgekeurd';
+}
+:lang(fr) #results-container div#eligible-products .card-holder:first-child:before {
+    content: 'Nous avons vérifié votre éligibilité auprès de ces banque et le taux que vous pouvez obtenir avec les informations que vous nous avez fournies. [CTA?]';
+}
+:lang(nl) #results-container div#eligible-products .card-holder:first-child:before {
+    content: 'Description of what the eligible criteria means.';
+}    
+
+
+/* Eligible under conditions */
+/* Title of the section */
+#results-container div#eligible-under-conditions-products:before {
+    font-size: 24px;
+    font-weight: bold;
+    color: #076B9C;
+    line-height: 1.5;
+}
+
+/* Description of the section */
+#results-container div#eligible-under-conditions-products .card-holder:first-child:before {
+    font-size:16px;
+    line-height: 1.5;
+    color: #312F2E;
+}
+
+:lang(fr) #results-container div#eligible-under-conditions-products:before {
+    content: "D'autres potentielles solutions de prêt...";
+}
+:lang(nl) #results-container div#eligible-under-conditions-products:before {
+    content: "Andere mogelijke kredietoplossingen...";
+}
+:lang(fr) #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
+    content: "Nous n'avons pas pu vérfier toutes les conditions d'éligibilité auprès de ces banques.";
+}
+:lang(nl) #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
+    content: "";
+}
+
+
+/* Not eligible-products */
+/* Title of the section */
+#results-container div#not-eligible-products:before {
+    font-size: 24px;
+    font-weight: bold;
+    color: #076B9C;
+    line-height: 1.5;
+}
+
+/* Description of the section */
+#results-container div#not-eligible-products .card-holder:first-child:before {
+    font-size:16px;
+    line-height: 1.5;
+    color: #312F2E;
+}
+
+:lang(fr) #results-container div#not-eligible-products:before {
+    content: "Les prêts qui ne soutiennent pas votre projet";
+}
+:lang(nl) #results-container div#not-eligible-products:before {
+    content: "Leningen die je project niet ondersteunen";
+}
+:lang(fr) #results-container div#not-eligible-products .card-holder:first-child:before {
+    content: "";
+}
+:lang(nl) #results-container div#not-eligible-products .card-holder:first-child:before {
+    content: "";
+}
+
+/* Uknown eligibility */
+/* Title of the section */
+#results-container div#unknown-eligibility-products:before {
+    font-size: 24px;
+    font-weight: bold;
+    color: #076B9C;
+    line-height: 1.5;
+}
+
+:lang(fr) #results-container div#unknown-eligibility-products:before {
+    content: "Nous n'avons pas pu vérfier votre éligibilité auprès de ces institutions";
+}
+:lang(nl) #results-container div#unknown-eligibility-products:before {
+    content: "We hebben bij deze instellingen niet kunnen nagaan of je in aanmerking komt";
+}
+
+
+/* Hides metrics - Replace the ID as needed */
+#results-container div#unknown-eligibility-products .show-more-btn {
+    display: none !important;
+}
+
+#results-container div#unknown-eligibility-products .product-name {
+    display: none;
+}
+
+#results-container div#unknown-eligibility-products .card-column:not([data-col-title=apr]):not([data-col-title=taeg]) {
+    display: none;
+}
+
+#results-container div#unknown-eligibility-products .card-column[data-col-title=taeg] {
+    display: block;    
+}
+
+#results-container div#unknown-eligibility-products .card-column[data-col-title=apr] {
+    display: block;
+}
+
+/* Makes the section of the Unknown eligibility responsive */
+#results-container div#unknown-eligibility-products .card-holder {
+    background-color: none;
+    border: none;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 0;
+    justify-content: space-between;
+}
+
+/* Style for the metrics - APR */
+#results-container div#unknown-eligibility-products .card-column[data-col-title=apr] .column-primary{
+    color: #6C6563;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+#results-container div#unknown-eligibility-products .card-column[data-col-title=apr] .column-secondary{
+    color: #6C6563;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.2;
+}
+
+/* Style for the metrics - TAEG */
+#results-container div#unknown-eligibility-products .card-column[data-col-title=taeg] .column-primary{
+    color: #6C6563;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+#results-container div#unknown-eligibility-products .card-column[data-col-title=taeg] .column-secondary{
+    color: #6C6563;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: normal;
+}
+
+/* Hides a gray div that appears on certain products */
+#results-container div#unknown-eligibility-products .footer-container{
+    display: none;
+}
+
+
+/* Containers of the Unknown Eligibility Products */
+#results-container div#unknown-eligibility-products .card-container {
+    display: inline-block!important;
+    margin-right: 0 !important;
+    border: 1px solid #CCCBC8;
+    border-radius: 3px;
+    width: 23%;
+    height: auto;
+    box-shadow: none;
+}
+
+#results-container div#unknown-eligibility-products .card-container .card-top .product-name-container{
+    padding:0;
+    border-bottom: none;
+    text-align: center;
+}
+
+#results-container div#unknown-eligibility-products .card-container .inner-content .metrics{
+    display:inline-block;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+
+#results-container div#unknown-eligibility-products .show-more-container {
+    display:none;
+}
+
+/* Hides the eligibility status on the unknown-eligibility-products section */
+#results-container div#unknown-eligibility-products .footer-container-inner{display:none;}
+
+.product-boxes .product-label{display: none;}
+
+
+/* Code to make the desktop style match mobile */
+.card-top .product-name-container{
+    background-color: #fff !important;
+    padding-top: 16px;
+    padding-bottom: 8px;
+    border: none;
+}
+
+
+/* Padding between eligibility status and HypoConnect */
+.generic-design .footer-container .banner-display{
+    padding-top: 8px;
+}
+
+.sort-selection__dropdown{
+    width: 160px;
+}
+
+/* MEDIA QUERIES */
+/* If the browser window is Xpx or smaller */
+@media only screen and (max-width: 1200px) {
+    #results-container div#unknown-eligibility-products .card-container {
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    #results-container div#unknown-eligibility-products .card-holder{
+        padding-top: 8px;
+    }
+    
+    #results-container div#unknown-eligibility-products .card-container {
+        width: 32%;
+    }
+
+    .product-name-container {
+        border: none;
+    }
+
+    #results-container div#unknown-eligibility-products .card-container .card-top .product-name-container .product-image{
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        position: initial;
+        margin-top: 16px;
+    }
+
+    #results-container div#unknown-eligibility-products .card-container .inner-content .metrics{
+        text-align: center;
+        display: inline-block !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #results-container div#unknown-eligibility-products .card-container {
+        width: 28%;
+    }
+
+    #results-container div#unknown-eligibility-products{
+        padding-left: 15px;
+        padding-right: 15px;
+}
+
+@media only screen and (max-width: 562px) {
+    #results-container div#unknown-eligibility-products .card-container {
+        width: 48%;
+    }
+}
+
+/* END SECTION FORMATTING AND TITLES*/
+
 /*
 	Provider pages: removal of unsupported content
 */
@@ -144,76 +450,3 @@ div#provider-details__product-contents-mg+.provider-block-product-contents__sear
     display: none;
 }
 
-/*
-	Country specific css (from SEO header file)
-*/
-.credit-cards-landing>.item.active.cc .hero-carousel__item__details,
-.credit-cards-landing>.item.active.cc .row.hero-carousel__item__cta,
-.credit-cards-landing>.item.active.pl .hero-carousel__item__details,
-.credit-cards-landing>.item.active.pl .row.hero-carousel__item__cta {
-	display: none;
-}
-
-.credit-cards-landing>.item.active.cc .col-lg-7.col-md-7.col-sm-12.col-xs-12,
-.credit-cards-landing>.item.active.pl .col-lg-7.col-md-7.col-sm-12.col-xs-12 {
-	width: 100%;
-}
-
-.credit-cards-landing>.item.active.cc .container,
-.credit-cards-landing>.item.active.pl .container {
-	background-image: none !important;
-}
-
-.credit-cards-landing>.item.active.cc .hero-carousel__item__row.row,
-.credit-cards-landing>.item.active.pl .hero-carousel__item__row.row {
-	padding-bottom: 20px;
-}
-
-.credit-cards-landing .top-banner {
-	background-color: #056f9d !important;
-}
-
-.credit-cards-landing>.item.active.cc .hero-carousel_item {
-	border-bottom: 0;
-	color: #056f9d;
-}
-
-@media (max-width:992px) and (min-width:481px) {
-	.credit-cards-landing>.item.active.cc #breadcrumbs span {
-		color: #979290;
-	}
-}
-
-.credit-cards-landing>.item.active.pl .hero-carousel_item {
-	border-bottom: 0;
-	color: #056f9d;
-}
-
-@media (min-width:992px) {
-	.credit-cards-landing>.item.active.cc .col-lg-7.col-md-7.col-sm-12.col-xs-12,
-	.credit-cards-landing>.item.active.pl .col-lg-7.col-md-7.col-sm-12.col-xs-12 {
-		padding-left: 0;
-	}
-}
-
-@media (max-width:992px) and (min-width:481px) {
-	.credit-cards-landing>.item.active.pl #breadcrumbs span {
-		color: #979290;
-	}
-}
-
-#breadcrumbs span.cgg-breadcrumbs-separator.m-cgg-icon--chevron-right {
-	background: none;
-}
-
-.product-label.timeLimited {
-	background-color: #e72564;
-}
-
-.product-showcase {
-	display: none;
-}
-
-.quotes-served {
-	display: none;
-}
