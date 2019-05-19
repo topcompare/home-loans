@@ -182,13 +182,13 @@ body.hl-rt #results-container div#eligible-products .card-holder:first-child:bef
     content: 'Vos prêts hypothécaires préacceptés';
 }
 :lang(nl) body.hl-rt #results-container div#eligible-products:before {
-    content: 'Leningen waarvoor je voorlopig  bent goedgekeurd';
+    content: 'Leningen waarvoor je voorlopig bent goedgekeurd';
 }
 :lang(fr) body.hl-rt #results-container div#eligible-products .card-holder:first-child:before {
-    content: 'Nous avons vérifié votre éligibilité auprès de ces banque et le taux que vous pouvez obtenir avec les informations que vous nous avez fournies.';
+    content: "Nous avons vérifié votre éligibilité auprès de ces banques et le taux personnalisé que vous pouvez obtenir avec les informations que vous nous avez fournies.";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-products .card-holder:first-child:before {
-    content: 'Description of what the eligible criteria means.';
+    content: "Wij hebben bij deze banken  met de door je verstrekte informatie je goedkeuring geverifieerd zowel als de gepersonaliseerd rentevoet die je kan krijgen.";
 }    
 
 
@@ -218,7 +218,7 @@ body.hl-rt #results-container div#eligible-under-conditions-products .card-holde
     content: "Nous n'avons pas pu vérfier toutes les conditions d'éligibilité auprès de ces banques.";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
-    content: "";
+    content: "Bij deze banken hebben we niet alle voorwaarden voor je goedkeuring kunnen verifiëren.";
 }
 
 
@@ -245,10 +245,10 @@ body.hl-rt #results-container div#not-eligible-products .card-holder:first-child
     content: "Leningen die je project niet ondersteunen";
 }
 :lang(fr) body.hl-rt #results-container div#not-eligible-products .card-holder:first-child:before {
-    content: "";
+    content: "Les raisons peuvent varier, comme votre apport en fonds propres, votre stabilité financière, votre âge, etc.";
 }
 :lang(nl) body.hl-rt #results-container div#not-eligible-products .card-holder:first-child:before {
-    content: "";
+    content: "De redenen kunnen variëren, zoals uw eigen bijdrage, financiële stabiliteit, leeftijd, enz.";
 }
 
 /* Uknown eligibility */
