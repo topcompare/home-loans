@@ -426,9 +426,17 @@ body.hl-rt .sort-selection__dropdown{
         width: 28%;
     }
 
-    body.hl-rt #results-container div#unknown-eligibility-products{
-        padding-left: 15px;
-        padding-right: 15px;
+    body.hl-rt #results-container .card-holder:first-child:before {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: block;
+    }
+
+    body.hl-rt  #results-container .cards-container:before {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: block;
+    }
 }
 
 @media only screen and (max-width: 562px) {
