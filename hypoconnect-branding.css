@@ -157,8 +157,10 @@ body.hl-rt .slider-set {
 body.hl-rt #results-container .cards-container {padding-top: 0px;}
 
 /* Padding for sections */
-body.hl-rt #results-container .cards-container#unknown-eligibility-products {padding-top: 24px;}
-body.hl-rt #results-container .cards-container#eligible-under-conditions-products {padding-top: 24px;}
+body.hl-rt #results-container .cards-container#eligible-products {padding-top: 16px;}
+body.hl-rt #results-container .cards-container#eligible-under-conditions-products {padding-top: 16px;}
+body.hl-rt #results-container .cards-container#not-eligible-products {padding-top: 16px;}
+body.hl-rt #results-container .cards-container#unknown-eligibility-products {padding-top: 16px;}
 
 /* Margin between products */
 body.hl-rt .card-holder .card-container{margin: 16px 0 !important;}
@@ -169,7 +171,7 @@ body.hl-rt #results-container div#eligible-products:before {
     font-size: 24px;
     font-weight: bold;
     color: #076B9C;
-    line-height: 1.5;
+    line-height: 1.2;
 }
 
 body.hl-rt #results-container div#eligible-products .card-holder:first-child:before {
@@ -198,7 +200,7 @@ body.hl-rt #results-container div#eligible-under-conditions-products:before {
     font-size: 24px;
     font-weight: bold;
     color: #076B9C;
-    line-height: 1.5;
+    line-height: 1.2;
 }
 
 /* Description of the section */
@@ -228,7 +230,7 @@ body.hl-rt #results-container div#not-eligible-products:before {
     font-size: 24px;
     font-weight: bold;
     color: #076B9C;
-    line-height: 1.5;
+    line-height: 1.2;
 }
 
 /* Description of the section */
@@ -257,7 +259,7 @@ body.hl-rt #results-container div#unknown-eligibility-products:before {
     font-size: 24px;
     font-weight: bold;
     color: #076B9C;
-    line-height: 1.5;
+    line-height: 1.2;
 }
 
 :lang(fr) body.hl-rt #results-container div#unknown-eligibility-products:before {
@@ -395,10 +397,6 @@ body.hl-rt .sort-selection__dropdown{
 }
 
 @media only screen and (max-width: 992px) {
-    body.hl-rt #results-container div#unknown-eligibility-products .card-holder{
-        padding-top: 8px;
-    }
-    
     body.hl-rt #results-container div#unknown-eligibility-products .card-container {
         width: 32%;
     }
@@ -425,7 +423,18 @@ body.hl-rt .sort-selection__dropdown{
     body.hl-rt #results-container div#unknown-eligibility-products .card-container {
         width: 28%;
     }
-
+	
+    body.hl-rt #results-container div#unknown-eligibility-products .card-holder{
+        margin: 0 10px;
+    }
+	
+    body.hl-rt #results-container div#eligible-products:before,
+    body.hl-rt #results-container div#eligible-under-conditions-products:before,
+    body.hl-rt #results-container div#not-eligible-products:before,
+    body.hl-rt #results-container div#unknown-eligibility-products:before {
+        font-size: 16px;
+    }
+    
     body.hl-rt #results-container .card-holder:first-child:before {
         padding-left: 10px;
         padding-right: 10px;
