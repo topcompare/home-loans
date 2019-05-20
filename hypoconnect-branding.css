@@ -190,7 +190,7 @@ body.hl-rt #results-container div#eligible-products .card-holder:first-child:bef
     content: "Nous avons vérifié votre éligibilité auprès de ces banques et le taux personnalisé que vous pouvez obtenir avec les informations que vous nous avez fournies.";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-products .card-holder:first-child:before {
-    content: "Wij hebben bij deze banken  met de door je verstrekte informatie je goedkeuring geverifieerd zowel als de gepersonaliseerd rentevoet die je kan krijgen.";
+    content: "We hebben geverifieerd dat je in aanmerking komt voor een lening bij deze banken met je gepersonaliseerde rentevoet op basis van de door jou verstrekte informatie.";
 }    
 
 
@@ -211,16 +211,16 @@ body.hl-rt #results-container div#eligible-under-conditions-products .card-holde
 }
 
 :lang(fr) body.hl-rt #results-container div#eligible-under-conditions-products:before {
-    content: "D'autres potentielles solutions de prêt...";
+    content: "D'autres potentielles solutions de prêt";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-under-conditions-products:before {
-    content: "Andere mogelijke kredietoplossingen...";
+    content: "Andere mogelijke kredietoplossingen";
 }
 :lang(fr) body.hl-rt #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
     content: "Nous n'avons pas pu vérfier toutes les conditions d'éligibilité auprès de ces banques.";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
-    content: "Bij deze banken hebben we niet alle voorwaarden voor je goedkeuring kunnen verifiëren.";
+    content: "We beschikken niet over alle vereisten om te bevestigen of je bij deze banken een lening krijgt.";
 }
 
 
@@ -250,7 +250,7 @@ body.hl-rt #results-container div#not-eligible-products .card-holder:first-child
     content: "Les raisons peuvent varier, comme votre apport en fonds propres, votre stabilité financière, votre âge, etc.";
 }
 :lang(nl) body.hl-rt #results-container div#not-eligible-products .card-holder:first-child:before {
-    content: "De redenen kunnen variëren, zoals uw eigen bijdrage, financiële stabiliteit, leeftijd, enz.";
+    content: "Je beantwoordt niet aan alle vereisten (eigen bijdrage, financiële stabiliteit, leeftijd,..) om bij deze banken een lening te krijgen.";
 }
 
 /* Uknown eligibility */
