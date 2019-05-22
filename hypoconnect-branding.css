@@ -155,18 +155,18 @@ body.hl-rt .slider-set {
 }
 
 /* Override title in blue header bar and make it thinner */
-.top-banner__heading>* {
+body.hl-rt .top-banner__heading>* {
     display: none;
 }
 
-:lang(fr) .top-banner__heading:after {
+body.hl-rt :lang(fr) .top-banner__heading:after {
     content: "Vos résultats"
 }
-:lang(nl) .top-banner__heading:after {
+body.hl-rt :lang(nl) .top-banner__heading:after {
     content: "Jouw resultaten"
 }
 
-.top-banner {
+body.hl-rt .top-banner {
     height: 51px !important;
 }
 
