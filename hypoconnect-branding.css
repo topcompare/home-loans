@@ -6,6 +6,7 @@
 - Results table: Adds style to HC products (identified with the banner)
 - Results table: Add eligibility section titles and formatting
 - Results table: Remove labels from amount sliders
+- Results table: override title in blue header
 - Provider pages: Removes unsupported content
 */
 
@@ -100,7 +101,7 @@ body.hypoconnect application-skip-link {
 }
 
 /*
-	Results table HC branding
+	Results table HC branding and customizations
 */
 
 @media (min-width: 991px) {
@@ -153,7 +154,25 @@ body.hl-rt .slider-set {
     padding-bottom: 10px !important;
 }
 
-/* START SECTION FORMATTING AND TITLES*/
+/* Override title in blue header bar and make it thinner */
+.top-banner__heading>* {
+    display: none;
+}
+
+:lang(fr) .top-banner__heading:after {
+    content: "Vos résultats"
+}
+:lang(nl) .top-banner__heading:after {
+    content: "Jouw resultaten"
+}
+
+.top-banner {
+    height: 51px !important;
+}
+
+/* 
+	START SECTION FORMATTING AND TITLES
+*/
 body.hl-rt #results-container .cards-container {padding-top: 0px;}
 
 /* Padding for sections */
@@ -454,7 +473,9 @@ body.hl-rt .sort-selection__dropdown{
     }
 }
 
-/* END SECTION FORMATTING AND TITLES*/
+/* 
+	END SECTION FORMATTING AND TITLES
+*/
 
 /*
 	Provider pages: removal of unsupported content
