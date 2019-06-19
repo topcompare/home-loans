@@ -236,7 +236,7 @@ body.hl-rt #results-container div#eligible-under-conditions-products .card-holde
     content: "Andere mogelijke kredietoplossingen";
 }
 :lang(fr) body.hl-rt #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
-    content: "Nous n'avons pas pu vérfier toutes les conditions d'éligibilité auprès de ces banques.";
+    content: "Nous n'avons pas pu vérifier toutes les conditions d'éligibilité auprès de ces banques.";
 }
 :lang(nl) body.hl-rt #results-container div#eligible-under-conditions-products .card-holder:first-child:before {
     content: "We beschikken niet over alle vereisten om te bevestigen of je bij deze banken een lening krijgt.";
