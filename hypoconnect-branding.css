@@ -7,6 +7,7 @@
 - Results table: Add eligibility section titles and formatting
 - Results table: Remove labels from amount sliders
 - Results table: override title in blue header
+- Results table: Use #approved-products to add message when no results found 
 - Provider pages: Removes unsupported content
 */
 
@@ -133,6 +134,17 @@ body.hl-rt .footer-container {
     body.hl-rt .footer-container img {
         width: unset !important;
     }
+}
+
+/* Override the header title because the number of products is misleading*/
+body.hl-rt .top-banner__heading span {
+    display: none;
+}
+:lang(fr) body.hl-rt .top-banner__heading:before {
+    content: "Voici vos résultats personnalisés";
+}
+:lang(nl) body.hl-rt .top-banner__heading:before {
+    content: "Jouw gepersonaliseerde resultaten";
 }
 
 /* Hide the column that contains the total reimbursement amount */
@@ -288,6 +300,31 @@ body.hl-rt #results-container div#unknown-eligibility-products:before {
     content: "We hebben bij deze instellingen niet kunnen nagaan of je in aanmerking komt";
 }
 
+/* No results message */
+body.hl-rt #results-container div#approved-products:before {
+    font-size: 24px;
+    font-weight: bold;
+    color: #076B9C;
+    line-height: 1.2;
+}
+body.hl-rt #results-container div#approved-products .card-holder:first-child:before {
+    font-size:16px;
+    line-height: 1.5;
+    color: #312F2E;
+}
+
+:lang(fr) body.hl-rt #results-container div#approved-products:before {
+    content: "Désolé, nous n'avons pas trouvé de prêt pour vous";
+}
+:lang(nl) body.hl-rt #results-container div#approved-products:before {
+    content: "Sorry, we hebben geen lening voor jouw gevonden";
+}
+:lang(fr) body.hl-rt #results-container div#approved-products .card-holder:first-child:before {
+    content: "Les données que vous avez entrées dans le formulaire ne permettent à aucune de nos institutions partenaires de soutenir votre projet. Les raisons peuvent varier mais les plus communes sont un apport de fonds propres trop faible par rapport au montant total du prêt, une situation financière particulière (indépendant, directeur d’entreprise) ou instable. Nous travaillons sur notre comparaison afin d’offrir une solution pour toutes les situations, n’hésitez pas à nous laisser un message".";
+}
+:lang(nl) body.hl-rt #results-container div#approved-products .card-holder:first-child:before {
+    content: "Met de gegevens die je in het formulier hebt ingevuld, kan geen van onze partnerinstellingen je project ondersteunen. De redenen kunnen variëren, maar de meest voorkomende zijn: de eigen inbreng is te laag in verhouding tot het te lenen bedrag, een bijzondere financiële situatie (onafhankelijk, bedrijfsleider) of instabiel. We werken aan onze vergelijking om een oplossing te bieden voor alle situaties, aarzel niet om ons feedback te geven";
+} 
 
 /* Hides metrics - Replace the ID as needed */
 body.hl-rt #results-container div#unknown-eligibility-products .show-more-btn {
@@ -307,6 +344,10 @@ body.hl-rt #results-container div#unknown-eligibility-products .card-column[data
 }
 
 body.hl-rt #results-container div#unknown-eligibility-products .card-column[data-col-title=apr] {
+    display: block;
+}
+
+body.hl-rt #results-container div#unknown-eligibility-products .card-column[data-col-title=type] {
     display: block;
 }
 
@@ -364,6 +405,10 @@ body.hl-rt #results-container div#unknown-eligibility-products .card-container {
     width: 23%;
     height: auto;
     box-shadow: none;
+}
+/* Reduce space between the metric lines to make the box more compact */
+#unknown-eligibility-products .inner-content .card-column__before_text {
+	height: 0.5em;
 }
 
 body.hl-rt #results-container div#unknown-eligibility-products .card-container .card-top .product-name-container{
