@@ -136,17 +136,6 @@ body.hl-rt .footer-container {
     }
 }
 
-/* Override the header title because the number of products is misleading*/
-body.hl-rt .top-banner__heading span {
-    display: none;
-}
-:lang(fr) body.hl-rt .top-banner__heading:before {
-    content: "Voici vos résultats personnalisés";
-}
-:lang(nl) body.hl-rt .top-banner__heading:before {
-    content: "Jouw gepersonaliseerde resultaten";
-}
-
 /* Hide the column that contains the total reimbursement amount */
 body.hl-rt .metrics>div:nth-of-type(2) {
     display: none !important;
@@ -172,10 +161,10 @@ body.hl-rt .top-banner__heading>* {
 }
 
 body.hl-rt :lang(fr) .top-banner__heading:after {
-    content: "Vos résultats"
+    content: "Voici vos résultats personnalisés";
 }
 body.hl-rt :lang(nl) .top-banner__heading:after {
-    content: "Jouw resultaten"
+    content: "Jouw gepersonaliseerde resultaten";
 }
 
 body.hl-rt .top-banner {
@@ -194,7 +183,7 @@ body.hl-rt #results-container .cards-container#not-eligible-products {padding-to
 body.hl-rt #results-container .cards-container#unknown-eligibility-products {padding-top: 16px;}
 
 /* Margin between products */
-body.hl-rt .card-holder .card-container{margin: 16px 0 !important;}
+body.hl-rt .card-holder .card-container {margin: 16px 0 !important;}
 
 
 /* Eligible */
