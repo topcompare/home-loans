@@ -24,6 +24,11 @@
   font-weight: bold;
 }
 
+/* Showing desktop buttons on mobile need some padding adjustment for the label to fit */
+button.continue-button {
+    padding: unset !important;
+}
+
 /*
 	HL funnel HypoConnect branding
 */
