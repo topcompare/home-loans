@@ -288,10 +288,16 @@ body.hl-rt #results-container div#unknown-eligibility-products:before {
 }
 
 :lang(fr) body.hl-rt #results-container div#unknown-eligibility-products:before {
-    content: "Nous n'avons pas pu vérfier votre éligibilité auprès de ces institutions";
+    content: "Nous n'avons pas pu vérifier votre éligibilité pour ces prêts";
 }
 :lang(nl) body.hl-rt #results-container div#unknown-eligibility-products:before {
-    content: "We hebben bij deze instellingen niet kunnen nagaan of je in aanmerking komt";
+    content: "We hebben voor deze leningen niet kunnen nagaan of je in aanmerking komt";
+}
+:lang(fr) body.hl-rt #results-container div#unknown-eligibility-products .card-holder:first-child:before {
+    content: "Les institutions ci-dessous ne nous fournissent pas encore de taux personnalisés. Nous affichons donc leurs taux standards, sans prendre en compte les réductions éventuelles liées à la souscription aux produits annexes, à la quotité ou encore votre situation personnelle et professionnelle";
+}
+:lang(nl) body.hl-rt #results-container div#unknown-eligibility-products .card-holder:first-child:before {
+    content: "De onderstaande instellingen leveren ons momenteel nog geen gepersonaliseerde rentevoeten. Daarom tonen we hun standaardtarieven, zonder rekening te houden met eventuele kortingen in verband met het afnemen van nevenproducten, de quotiteit of uw persoonlijke en professionele situatie.";
 }
 
 /* No results message */
@@ -365,7 +371,7 @@ body.hl-rt #results-container div#unknown-eligibility-products .card-column[data
 
 body.hl-rt #results-container div#unknown-eligibility-products .card-column[data-col-title=apr] .column-secondary{
     color: #6C6563;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: normal;
     line-height: 1.2;
 }
@@ -379,7 +385,7 @@ body.hl-rt #results-container div#unknown-eligibility-products .card-column[data
 
 body.hl-rt #results-container div#unknown-eligibility-products .card-column[data-col-title=taeg] .column-secondary{
     color: #6C6563;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.2;
     font-weight: normal;
 }
