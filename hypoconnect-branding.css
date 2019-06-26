@@ -161,10 +161,10 @@ body.hl-rt .top-banner__heading>* {
 }
 
 body.hl-rt :lang(fr) .top-banner__heading:after {
-    content: "Voici vos résultats personnalisés";
+    content: "Vos résultats";
 }
 body.hl-rt :lang(nl) .top-banner__heading:after {
-    content: "Jouw gepersonaliseerde resultaten";
+    content: "Jij resultaten";
 }
 
 body.hl-rt .top-banner {
