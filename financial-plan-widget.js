@@ -20,7 +20,7 @@ var locales = {
     loanAmount: "Montant à emprunter"
   },
   nl: {
-    title: "Uw financieel plan",
+    title: "Je financieel plan",
     brussels: "Brussel",
     flanders: "Vlaanderen",
     wallonia: "Wallonië",
@@ -116,7 +116,7 @@ function getStaircaseRow(matrix, value) {
 /*
 SECTION: Create DOM structure
 */
-// Prepare highlight boxes for exception cases
+// Desktop structure
 var boxFP =
   '<div class="info_up_half"> <span class="info_up_half--title ng-binding">' +
   locales[lang]["title"] +
@@ -133,6 +133,8 @@ var boxFP =
   '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-own-funds"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span> </div > <div class="cgg-row ng-scope"> <div class="cgg-col-md-12 ci-info-box__header ng-hide"> <span class="ci-info-box__header-text ng-binding"></span> <span class="m-cgg m-cgg-icon--chevron-right ci-info-box__header-edit-icon"></span> </div><span class="ng-scope"> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold text-ellipsis ng-binding">' +
   locales[lang]["loanAmount"] +
   '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-loan-amount"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span></div></div >';
+
+// Mobile structure
 
 /*
 SECTION: define formulas
@@ -208,7 +210,7 @@ function updateFP() {
 /*
 SECTION: Loader
 */
-$(document).ready(function() {
+
   // Load FP only if we are in the funnel
   if (window.location.href.indexOf("etapes") + window.location.href.indexOf("stappen") > -1 ) {
 	updateFP();
@@ -220,5 +222,3 @@ $(document).ready(function() {
       		updateFP();
   	});
   }
-  
-});
