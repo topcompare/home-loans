@@ -165,15 +165,29 @@ body.hl-rt .top-banner__heading>* {
     display: none;
 }
 
-body.hl-rt :lang(fr) .top-banner__heading:after {
+body.hl-rt :lang(fr) .top-banner__heading:before {
     content: "Vos résultats";
+    font-weight: bold;
 }
-body.hl-rt :lang(nl) .top-banner__heading:after {
+body.hl-rt :lang(nl) .top-banner__heading:before {
     content: "Jij resultaten";
+    font-weight: bold;
+}
+
+body.hl-rt :lang(fr) .top-banner__heading:after {
+    content: "Vous pouvez filtrer les résultats en fonction du type de taux souhaité (fixe, variable, semi-fixe) dans la partie gauche de la page.";
+    display: block;
+    font-size: 14px;
+}
+
+body.hl-rt :lang(nl) .top-banner__heading:after {
+    content: "In het linkergedeelte van de pagina kan je de resultaten filteren op basis van het type tarief dat je wilt (vast, variabel, semi-vast).";
+    display: block;
+    font-size: 14px;
 }
 
 body.hl-rt .top-banner {
-    height: 51px !important;
+/*    height: 51px !important; */
 }
 
 /* 
