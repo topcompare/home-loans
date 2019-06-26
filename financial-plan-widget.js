@@ -135,6 +135,13 @@ var boxFP =
   '</div><div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style" id="fp-loan-amount"> <span class="m-cgg m-cgg-icon--chevron-right pl-icon-style"></span>&nbsp;</div></span></div></div >';
 
 // Mobile structure
+var mobileFP = '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["registrationRights"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-registration-fees-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+mobileFP += '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["notaryFees"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-notary-fees-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+mobileFP += '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["mortgageFees"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-mortgage-fees-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+mobileFP += '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["totalCost"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-total-cost-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+mobileFP += '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["ownFunds"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-own-funds-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+mobileFP += '<div class="cgg-row ng-scope"> <div class="cgg-col-md-12 info_down_half__header ng-hide" > <span class="info_down_half__header-text ng-binding"></span> <a href="" class="info_down_half__header-edit ng-binding"><span class="m-cgg m-cgg-icon--chevron-right info_down_half__header-edit-icon"></span> </a> </div> <div class="info_down_half--label cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 text-left text-bold ng-binding ng-scope">'+locales[lang]["loanAmount"]+'</div> <div class="cgg-col-md-6 cgg-col-lg-6 cgg-col-sm-6 cgg-col-xs-6 info_link_style ng-scope" id="fp-loan-amount-sm"> <span class="m-cgg m-cgg-icon--chevron-right info_down_half--arrow pl-icon-style"></span>&nbsp;</div> </div>';
+
 
 /*
 SECTION: define formulas
@@ -204,6 +211,21 @@ function updateFP() {
     document.getElementById("fp-loan-amount").lastChild.nodeValue = formatCurrency(Math.max(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) - ownFunds, 0));
   } else {
     $(".ci-info-box").prepend(boxFP);
+  }
+  // To the same for mobile
+  if (document.getElementById("fp-registration-fees-sm") != null) {
+    document.getElementById("fp-registration-fees-sm").lastChild.nodeValue = formatCurrency(registrationFees);
+    document.getElementById("fp-notary-fees-sm").lastChild.nodeValue = formatCurrency(notaryFeesMax);
+    document.getElementById("fp-mortgage-fees-sm").lastChild.nodeValue = formatCurrency(mortgageFeesMax);
+    document.getElementById("fp-total-cost-sm").lastChild.nodeValue = formatCurrency(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) );
+    document.getElementById("fp-own-funds-sm").lastChild.nodeValue = formatCurrency(-ownFunds);
+    document.getElementById("fp-loan-amount-sm").lastChild.nodeValue = formatCurrency(Math.max(propertyValue + parseFloat(registrationFees) + parseFloat(notaryFeesMax) + parseFloat(mortgageFeesMax) - ownFunds, 0));
+  } else {
+	// Create new section on mobile
+	$(".cgg-step-info-mobile > .info_down_half").eq(0).before('<div class="info_down_half"></div>');
+	// Add lines on mobile
+	$(".cgg-step-info-mobile > .info_down_half").eq(0).append(mobileFP);
+
   }
 }
 
