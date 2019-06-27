@@ -178,13 +178,13 @@ body.hl-rt :lang(nl) .top-banner__heading:before {
 }
 
 body.hl-rt :lang(fr) .top-banner__heading:after {
-    content: "Vous pouvez filtrer les résultats en fonction du type de taux souhaité (fixe, variable, semi-fixe) dans la partie gauche de la page.";
+    content: "Vous pouvez filtrer les résultats en fonction du type de taux souhaité (fixe, variable, semi-fixe).";
     display: block;
     font-size: 14px;
 }
 
 body.hl-rt :lang(nl) .top-banner__heading:after {
-    content: "In het linkergedeelte van de pagina kan je de resultaten filteren op basis van het type tarief dat je wilt (vast, variabel, semi-vast).";
+    content: "Je kan de resultaten filteren op basis van het type tarief dat je wilt (vast, variabel, semi-vast).";
     display: block;
     font-size: 14px;
 }
