@@ -177,7 +177,7 @@ function computeFP() {
     if (region == "flanders" && firstProperty) {
       registrationFees = (propertyValue - regionalDeduction)* 0.07;
     } else if (region == "wallonia" && regionInfo.useDiscountedFee) {
-    registrationFees = Math.max(regionalFees[region] * ( (propertyValue-discountValue) - regionalDeduction ) + 0.06 * Math.min(discountValue, propertyValue),0);
+    registrationFees = Math.min(propertyValue - regionalDeduction, discountValue) * 0.06 + Math.max(propertyValue - regionalDeduction - discountValue, 0) * regionalFees[region];
     } else{
       registrationFees = (propertyValue - regionalDeduction) * regionalFees[region];
     }
