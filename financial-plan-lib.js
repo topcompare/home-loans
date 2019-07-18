@@ -102,11 +102,11 @@ var FinancialPlan =
 		}
 
 		if (region == "flanders" && firstProperty) {
-		  registrationFees = (propertyValue - regionalDeduction)* 0.07;
+			registrationFees = (propertyValue - regionalDeduction)* 0.07;
 		} else if (region == "wallonia" && false) { //FIXME: we need a new variable here to capture <700 cadastral revenue discount
-		registrationFees = Math.max(regionalFees[region] * ( (propertyValue-discountValue) - regionalDeduction ) + 0.06 * Math.min(discountValue, propertyValue),0);
+			registrationFees = Math.min(propertyValue - regionalDeduction, discountValue) * 0.06 + Math.max(propertyValue - regionalDeduction - discountValue, 0) * regionalFees[region];
 		} else{
-		  registrationFees = (propertyValue - regionalDeduction) * regionalFees[region];
+			registrationFees = (propertyValue - regionalDeduction) * regionalFees[region];
 		}
 
 		// Compute the amounts
