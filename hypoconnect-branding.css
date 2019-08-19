@@ -173,7 +173,7 @@ body.hl-rt :lang(fr) .top-banner__heading:before {
     font-weight: bold;
 }
 body.hl-rt :lang(nl) .top-banner__heading:before {
-    content: "Jij resultaten";
+    content: "Jouw resultaten";
     font-weight: bold;
 }
 
