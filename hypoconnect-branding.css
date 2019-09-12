@@ -545,8 +545,3 @@ body.hl-rt .sort-selection__dropdown{
 div#provider-details__product-contents-mg+.provider-block-product-contents__search-result{
     display: none;
 }
-
-div#provider-details__product-contents-mg+.provider-block-product-contents__search-result+.provider-block-cc-portal{
-    display: none;
-}
-
