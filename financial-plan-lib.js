@@ -1,5 +1,3 @@
-/*jshint esversion: 7 */
-
 /*
 This library computes the total loan amount for a given property value.
 Method: totalLoanAmount(property, funds, region, first)
@@ -10,6 +8,8 @@ region = either "brussels", "wallonia" or "flanders"
 first = true/false whether it is the first and main property (it leads to regional discounts)
 
 Example: console.log(FinancialPlan.totalLoanAmount(200000,50000,"brussels",true))
+
+Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects
 
 */
 
@@ -76,7 +76,7 @@ var FinancialPlan = {
 		}
 	},
 
-	// Parameters of the simulation
+	// Parameters of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
 	propertyValue: 300000,
 	region: "brussels",
 	firstProperty: true,
@@ -99,33 +99,34 @@ var FinancialPlan = {
 	mortgageTotalFees: 0,
 	totalAmountWithMortgage: 0,
 	repaymentSchedule: [],
-	monthlyRate: 0.002466,
+	annualRate: 0.025,
+	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
+	get monthlyRate() { return (1+this.annualRate)**(1/12)-1},
 
 	// Methods used for simulations
-	notary() {
-		notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * this.VAT;
+	calcNotaryFees() {
+		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * this.VAT;
 		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * this.VAT + this.notaryFixedCost;
 		this.notaryVariableFees = notaryVariablePercentage * this.propertyValue;
 		this.notaryTotalFees = this.notaryFixedFees + this.notaryVariableFees;
 		this.totalAcquisitionCost += this.notaryTotalFees;
 	},
 
-	registration() {
+	calcRegistrationFees() {
+		let regionalDeduction = 0;
 		if (this.region == "brussels" && this.firstProperty && this.propertyValue <= 500000) {
 			regionalDeduction = Math.min(this.propertyValue, 175000);
 		} else if (this.region == "flanders" && this.firstProperty && this.propertyValue <= 200000) {
 			regionalDeduction = Math.min(this.propertyValue, 80000);
 		} else if (this.region == "wallonia" && this.firstProperty) {
 			regionalDeduction = Math.min(this.propertyValue, 20000);
-		} else {
-			regionalDeduction = 0;
 		}
 
 		this.registrationInitialFees = this.propertyValue * this.regionalFees[this.region];
 		if (this.region == "flanders" && this.firstProperty) {
 			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * 0.07;
 		} else if (this.region == "wallonia" && this.walloniaDiscount) {
-			this.registrationDiscountedFees = Math.min(this.propertyValue - regionalDeduction, this.discountValue) * 0.06 + Math.max(this.propertyValue - regionalDeduction - this.discountValue, 0) * regionalFees[this.region];
+			this.registrationDiscountedFees = Math.min(this.propertyValue - regionalDeduction, this.discountValue) * 0.06 + Math.max(this.propertyValue - regionalDeduction - this.discountValue, 0) * this.regionalFees[this.region];
 		} else {
 			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * this.regionalFees[this.region];
 		}
@@ -133,7 +134,7 @@ var FinancialPlan = {
 		this.totalAcquisitionCost += this.registrationDiscountedFees;
 	},
 
-	homeLoan() {
+	calcHomeLoan() {
 		this.loanAmount = this.totalAcquisitionCost - this.ownFunds;
 		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgageFixedRateCol];
 		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgagePercentageCol] * this.loanAmount - this.loanAmount;
@@ -141,7 +142,7 @@ var FinancialPlan = {
 		this.totalAmountWithMortgage = this.totalAcquisitionCost + this.mortgageTotalFees;
 	},
 
-	schedule() {
+	calcSchedule() {
 		//this.monthlyPayment = (this.monthlyRate * this.totalAmountWithMortgage) / ((1 - (1 + this.monthlyRate) ** (-(12*this.durationYears))));
 		this.monthlyPayment = ( this.monthlyRate * ( this.loanAmount * ( (this.monthlyRate+1)**(12*this.durationYears) ) ) ) / ( ( this.monthlyRate + 1 ) * ( (this.monthlyRate+1)**(12*this.durationYears) -1 ) );
 		console.log(this.monthlyPayment);
@@ -159,7 +160,7 @@ var FinancialPlan = {
 			interest: this.loanAmount * this.monthlyRate,
 			balance: this.loanAmount - this.monthlyPayment
 		};
-		for (i = 1; i < (12*this.durationYears); i++) {
+		for (let i = 1; i < (12 * this.durationYears); i++) {
 			schedule[i] = {
 				date: "incrementDate()",
 				payment: this.monthlyPayment,
@@ -174,47 +175,59 @@ var FinancialPlan = {
 
 	// Method to run the simulations
 	updateAcquisitionCost() {
-		// Default own funds to 20% of property value
+		// Default own funds to 20% of property value if unset
 		if (this.ownFunds == undefined) {
 			this.ownFunds = 0.2 * this.propertyValue;
 		}
 
 		this.totalAcquisitionCost = this.propertyValue;
-		this.registration();
-		this.notary();
-		this.homeLoan();
-		this.schedule();
+		this.calcRegistrationFees();
+		this.calcNotaryFees();
+		this.calcHomeLoan();
+		this.calcSchedule();
 		
 		return 0;
 	},
 
 	updateMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
-		let availableRevenue = this.income - this.expenses;
-		let allowedRevenueShare = 1.0 / 3;
-		this.monthlyPayment = availableRevenue * allowedRevenueShare;
+		// assumptions: debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
+		let maxDebtRatio = 0.45;
+		let netAvailableIncome = this.income - this.expenses;
+		
+		// if a monthly installment has been set, use it instead of the one deducted from the revenue and debt ratio
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
+		} else {
+			this.monthlyPayment = netAvailableIncome * maxDebtRatio;
 		}
-		let result1 = [];
-		for (i = 0; i < 31; i++) {
-			let loanAmount = this.monthlyPayment / (this.monthlyRate / (1 - (1 + this.monthlyRate) ** (-12 * i)));
-			result1[i] = loanAmount;
+		
+		// the NAI must be at least 1000€ (1200€ with co-applicant) to be eligibile for a loan. Otherwise, return 0
+		if (netAvailableIncome >= 1000) {
+			// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
+			let result = [];
+			for (let years = 0; years < 31; years++) {
+				// Reference: http://www.iotafinance.com/en/Formula-Maximum-Loan-Amount.html
+				// Interesting article by CAG: https://www.comparehero.my/personal-loan/articles/maximum-loan-amount-calculated
+				let principal = this.monthlyPayment / (this.monthlyRate / (1 - (1 + this.monthlyRate) ** (-12 * years)));
+				result[years] = principal;
+			}
+			return result;
 		}
-		return result1;
+		return 0;
 	},
 
 	updateMaxProperty() {
 		this.propertyValue = 0;
-		let result2 = [];
+		let result = [];
 		let maxLoanAmount = this.updateMaxLoan();
-		for (years = 0; years < 31; years++) {
+		for (let years = 0; years < 31; years++) {
 			this.updateAcquisitionCost();
 			while (this.loanAmount < maxLoanAmount[years]) {
 				this.propertyValue += 1000;
 				this.updateAcquisitionCost();
 			}
-			result2[years] = this.propertyValue;
+			result[years] = this.propertyValue;
 		}
-		return result2;
+		return result;
 	}
 };
