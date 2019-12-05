@@ -209,7 +209,8 @@ var FinancialPlan = {
 				// Reference: http://www.iotafinance.com/en/Formula-Maximum-Loan-Amount.html
 				// Interesting article by CAG: https://www.comparehero.my/personal-loan/articles/maximum-loan-amount-calculated
 				let principal = this.monthlyPayment / (this.monthlyRate / (1 - (1 + this.monthlyRate) ** (-12 * years)));
-				result[years] = principal;
+				// Round to nearest hundred before returning the array
+				result[years] = Math.round(principal/100)*100;
 			}
 			return result;
 		}
