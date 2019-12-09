@@ -192,29 +192,29 @@ var FinancialPlan = {
 	updateMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
 		// assumptions: debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
 		let maxDebtRatio = 0.45;
-		let netAvailableIncome = this.income - this.expenses;
-		
+
 		// if a monthly installment has been set, use it instead of the one deducted from the revenue and debt ratio
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
 		} else {
-			this.monthlyPayment = netAvailableIncome * maxDebtRatio;
-		}
-		
-		// the NAI must be at least 1000€ (1200€ with co-applicant) to be eligibile for a loan. Otherwise, return 0
-		if (netAvailableIncome >= 1000) {
-			// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
-			let result = [];
-			for (let years = 0; years < 31; years++) {
+			this.monthlyPayment = this.income * maxDebtRatio - this.expenses;
+		}		
+
+		// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
+		let result = [];
+		for (let years = 0; years < 31; years++) {
+			// the NAI must be at least 1000€ (1200€ with co-applicant) to be eligibile for a loan. Otherwise, return 0
+			if (this.income - this.expense - this.monthlyPayment < 1000) {
+				result[years] = 0;
+			} else {
 				// Reference: http://www.iotafinance.com/en/Formula-Maximum-Loan-Amount.html
 				// Interesting article by CAG: https://www.comparehero.my/personal-loan/articles/maximum-loan-amount-calculated
 				let principal = this.monthlyPayment / (this.monthlyRate / (1 - (1 + this.monthlyRate) ** (-12 * years)));
 				// Round to nearest hundred before returning the array
 				result[years] = Math.round(principal/100)*100;
 			}
-			return result;
 		}
-		return 0;
+		return result;
 	},
 
 	updateMaxProperty() {
