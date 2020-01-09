@@ -5,7 +5,7 @@ Parameters:
 property = value/price of the property
 funds = own funds that can be brought to finance the project
 region = either "brussels", "wallonia" or "flanders"
-first = true/false whether it is the first and main property (it leads to regional discounts)
+firstProperty = true/false whether it is the first and main property (it leads to regional discounts)
 
 Example: console.log(FinancialPlan.totalLoanAmount(200000,50000,"brussels",true))
 
@@ -84,7 +84,7 @@ var FinancialPlan = {
 	ownFunds: 100000,
 	durationYears: 20,
 	income: 5000,
-	expenses: 0,
+	charges: 0,
 	monthlyPayment: 0,
 	notaryFixedFees: 0,
 	notaryVariableFees: 0,
@@ -197,14 +197,14 @@ var FinancialPlan = {
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
 		} else {
-			this.monthlyPayment = this.income * maxDebtRatio - this.expenses;
+			this.monthlyPayment = this.income * maxDebtRatio - this.charges;
 		}		
 
 		// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
 		let result = [];
 		for (let years = 0; years < 31; years++) {
 			// the NAI must be at least 1000€ (1200€ with co-applicant) to be eligibile for a loan. Otherwise, return 0
-			if (this.income - this.expense - this.monthlyPayment < 1000) {
+			if (this.income - this.charges - this.monthlyPayment < 1000) {
 				result[years] = 0;
 			} else {
 				// Reference: http://www.iotafinance.com/en/Formula-Maximum-Loan-Amount.html
