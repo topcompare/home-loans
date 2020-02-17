@@ -1,9 +1,7 @@
 /* This is a custom css scripts and contains the following features:
-- Funnel: Adds HC branding
 - Funnel: Removes the promotion box
 - Funnel: Styles the financial plan widget
 - Results table: Fixes the scaling of eligiblity icon in the results table
-- Results table: Adds style to HC products (identified with the banner)
 - Results table: Add eligibility section titles and formatting
 - Results table: Remove labels from amount sliders
 - Results table: override title in blue header
@@ -30,104 +28,13 @@ button.continue-button {
 }
 
 /*
-	HL funnel HypoConnect branding
-*/
-
-body.hypoconnect {
-  background-color: #e0edee;
-  transition: 0.8s;
-}
-body.hypoconnect .cgg-progress__bar {
-  background-color: #8d1656 !important;
-}
-body.hypoconnect .cgg-progress__bar-container {
-  background-color: #5e6e82 !important;
-}
-body.hypoconnect .cgg-progress__step-icon.cgg-progress__highlighted {
-  background-color: #8d1656;
-  border-color: #8d1656;
-}
-body.hypoconnect .cgg-progress__step-icon.cgg-progress__notHighlighted {
-  border: 2px solid #5a6e84 !important;
-  background-color: #eff9f9;
-}
-body.hypoconnect .cgg-headline-description__headline {
-  color: #333;
-}
-body.hypoconnect .cgg-group-button .continue-button {
-  background-color: #9a0058;
-  border-color: #9a0058;
-}
-body.hypoconnect .cgg-group-button .go-back-button {
-  background-color: #fff;
-  /*border:1px solid #004f9a*/
-}
-body.hypoconnect .cgg-group-button .go-back-button > span {
-  /*color:#004f9a */
-}
-body.hypoconnect .cgg-info-box,
-body.hypoconnect .ci-info-box {
-  box-shadow: 5px 5px 0 1px #cadddf;
-  color: #004f9a;
-}
-body.hypoconnect .ci-info-box > .info_up_half {
-  border-bottom-color: #004f9a;
-}
-body.hypoconnect .cgg-global-input {
-  border: 1px solid #fff;
-}
-body.hypoconnect .funnel-page__step-container:before {
-  content: "";
-  width: 100px;
-  height: 50px;
-  background: url(https://www.topcompare.be/s3/belgium/topcompare.be/production/be/images/providerLogos/HypoConnect.png)
-    no-repeat;
-  background-size: 100%;
-  display: block;
-  margin: 0;
-}
-body.hypoconnect .cgg-progress__step-icon i,
-body.hypoconnect .m-cgg-icon--chevron-right,
-body.hypoconnect .cgg-hint__header a.cgg-help,
-body.hypoconnect
-  .ci-info-box
-  .ci-info-box__selectedLink.ci-info-box__selectedLink,
-body.hypoconnect .ci-info-box .info_link_style a {
-  color: #9a0058;
-}
-body.hypoconnect .radio-toolbar label {
-  border: 1px solid #9a0058;
-}
-body.hypoconnect .radio-toolbar input[type="radio"]:checked + label {
-  background-color: #9a0058;
-}
-
-body.hypoconnect application-skip-link {
-  font-style: italic;
-}
-
-/*
 	Results table HC branding and customizations
 */
-
-@media (min-width: 991px) {
-  body.hl-rt .product-name-container.hc {
-    background-color: rgba(141, 22, 86, 0.15);
-  }
-}
-
-body.hl-rt .product-name-container .product-label {
-  background-color: #8d1656 !important;
-}
 
 body.hl-rt .score-ranking-medium,
 .score-ranking-high,
 .score-ranking-low {
   background-color: #fafafa !important;
-}
-
-body.hl-rt .banner-title.exclusive {
-  color: #8d1656 !important;
 }
 
 body.hl-rt .footer-container {
@@ -460,7 +367,7 @@ body.hl-rt .card-top .product-name-container{
 }
 
 
-/* Padding between eligibility status and HypoConnect */
+/* Padding between eligibility status */
 body.hl-rt .generic-design .footer-container .banner-display{
     padding-top: 8px;
 }
