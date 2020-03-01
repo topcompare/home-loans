@@ -62,22 +62,8 @@ var FinancialPlan = {
 	mortgagePercentageCol: 1,
 	mortgageFixedRateCol: 2,
 
-	// Auxiliary function to navigate the matrices
-	getStaircaseRow: function (matrix, value) {
-		if (matrix[0][0] > value) {
-			return 0;
-		}
-		for (var i = 0; i < matrix.length; i++) {
-			if (matrix[i][0] - value > 0) {
-				return i - 1;
-			} else if (value >= matrix[matrix.length - 1][0]) {
-				return matrix.length - 1;
-			}
-		}
-	},
-
-	// Parameters of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
-	propertyValue: 300000,
+	// Default parameters of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
+	propertyValue: 200000,
 	region: "brussels",
 	firstProperty: true,
 	walloniaDiscount: false,
@@ -101,7 +87,21 @@ var FinancialPlan = {
 	repaymentSchedule: [],
 	annualRate: 0.025,
 	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
-	get monthlyRate() { return (1+this.annualRate)**(1/12)-1},
+	get monthlyRate() { return (1+this.annualRate)**(1/12)-1 },
+  
+	// Auxiliary function to navigate the matrices
+	getStaircaseRow: function (matrix, value) {
+		if (matrix[0][0] > value) {
+			return 0;
+		}
+		for (var i = 0; i < matrix.length; i++) {
+			if (matrix[i][0] - value > 0) {
+				return i - 1;
+			} else if (value >= matrix[matrix.length - 1][0]) {
+				return matrix.length - 1;
+			}
+		}
+	},
 
 	// Methods used for simulations
 	calcNotaryFees() {
@@ -121,7 +121,7 @@ var FinancialPlan = {
 		} else if (this.region == "wallonia" && this.firstProperty) {
 			regionalDeduction = Math.min(this.propertyValue, 20000);
 		}
-
+        // Determine the registration fee. This is the main output of the function.
 		this.registrationInitialFees = this.propertyValue * this.regionalFees[this.region];
 		if (this.region == "flanders" && this.firstProperty) {
 			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * 0.07;
@@ -130,31 +130,33 @@ var FinancialPlan = {
 		} else {
 			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * this.regionalFees[this.region];
 		}
+        // For detailed breakdown, determine the registration discount by difference
 		this.registrationFeesDiscount = this.registrationInitialFees - this.registrationDiscountedFees;
-		this.totalAcquisitionCost += this.registrationDiscountedFees;
-	},
+        // For the total, set the total acqusition cost
+        this.totalAcquisitionCost += this.registrationDiscountedFees;
+    },
 
-	calcHomeLoan() {
-		this.loanAmount = this.totalAcquisitionCost - this.ownFunds;
+	calcMortgageFees() {
+        // Determine mortgage fees (varies with the loan amount)
+        this.loanAmount = this.propertyValue + this.notaryTotalFees + this.registrationDiscountedFees - this.ownFunds;
 		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgageFixedRateCol];
 		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgagePercentageCol] * this.loanAmount - this.loanAmount;
 		this.mortgageTotalFees = this.mortgageFixedFees + this.mortgageVariableFees;
-		this.totalAmountWithMortgage = this.totalAcquisitionCost + this.mortgageTotalFees;
+		// Make the sum for the total project cost
+        this.totalAmountWithMortgage = this.totalAcquisitionCost + this.mortgageTotalFees;
 	},
 
 	calcSchedule() {
 		//this.monthlyPayment = (this.monthlyRate * this.totalAmountWithMortgage) / ((1 - (1 + this.monthlyRate) ** (-(12*this.durationYears))));
 		this.monthlyPayment = ( this.monthlyRate * ( this.loanAmount * ( (this.monthlyRate+1)**(12*this.durationYears) ) ) ) / ( ( this.monthlyRate + 1 ) * ( (this.monthlyRate+1)**(12*this.durationYears) -1 ) );
-		console.log(this.monthlyPayment);
 		let schedule = [];
 		schedule.length = (12*this.durationYears);
-		//var date = moment();
-		incrementDate = function () {
+		/*incrementDate = function () {
 			moment(date).add(1, 'month');
 			return date;
-		};
+		};*/
 		schedule[0] = {
-			date: "incrementDate()",
+			//date: incrementDate(),
 			payment: this.monthlyPayment,
 			principal: this.monthlyPayment - this.loanAmount * this.monthlyRate,
 			interest: this.loanAmount * this.monthlyRate,
@@ -162,7 +164,7 @@ var FinancialPlan = {
 		};
 		for (let i = 1; i < (12 * this.durationYears); i++) {
 			schedule[i] = {
-				date: "incrementDate()",
+				//date: incrementDate(),
 				payment: this.monthlyPayment,
 				principal: this.monthlyPayment - (schedule[i - 1].balance * (1 + this.monthlyRate) - this.monthlyPayment) * this.monthlyRate,
 				interest: (schedule[i - 1].balance * (1 + this.monthlyRate) - this.monthlyPayment) * this.monthlyRate,
@@ -172,9 +174,31 @@ var FinancialPlan = {
 		this.repaymentSchedule = schedule;
 	},
 
+    getCumulativeRepayment() {
+        // make sure the repayment schedule is calcuated
+        this.calcSchedule();
+      	let schedule = [];
+		schedule.length = (12*this.durationYears);
+      		schedule[0] = {
+			outstanding: Math.round((this.loanAmount - this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100 ,
+			principal: Math.round((this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100,
+			interest: Math.round((this.repaymentSchedule[0].interest + Number.EPSILON) * 100) / 100
+		};
+		for (let i = 1; i < (12 * this.durationYears); i++) {
+			schedule[i] = {
+				outstanding: schedule[i-1].outstanding - Math.round((this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
+				principal: schedule[i-1].principal + Math.round((this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
+				interest: schedule[i-1].interest + Math.round((this.repaymentSchedule[i].interest + Number.EPSILON) * 100) / 100
+			};
+		}
+      return schedule;
+    },
 
-	// Method to run the simulations
-	updateAcquisitionCost() {
+    /**
+    * Determine the total project cost
+    * @return {Number}      The maximum loan amount for each duration (0 to 30 years)
+    */
+	getAcquisitionCost() {
 		// Default own funds to 20% of property value if unset
 		if (this.ownFunds == undefined) {
 			this.ownFunds = 0.2 * this.propertyValue;
@@ -183,13 +207,19 @@ var FinancialPlan = {
 		this.totalAcquisitionCost = this.propertyValue;
 		this.calcRegistrationFees();
 		this.calcNotaryFees();
-		this.calcHomeLoan();
+		this.calcMortgageFees();
 		this.calcSchedule();
 		
-		return 0;
+        // Use rounding to ensure things like 1.005 round correctly
+		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
 	},
 
-	updateMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
+    /**
+    * Determine the maximum loan amount given revenues and charges. It assumes conservative debt ratio
+    * @param  {Number} arbitraryMonthlyPayment Optional: Set the monthly installment instead of using the maximum value given the allowed debt ratio
+    * @return {array}      The maximum loan amount for each duration (0 to 30 years)
+    */
+	getMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
 		// assumptions: debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
 		let maxDebtRatio = 0.45;
 
@@ -217,7 +247,11 @@ var FinancialPlan = {
 		return result;
 	},
 
-	updateMaxProperty() {
+    /**
+    * Determine the maximum value of the property given the borrowing capacity
+    * @return {array}      The maximum property value for each duration (0 to 30 years)
+    */
+	getMaxProperty() {
 		this.propertyValue = 0;
 		let result = [];
 		let maxLoanAmount = this.updateMaxLoan();
@@ -232,3 +266,4 @@ var FinancialPlan = {
 		return result;
 	}
 };
+
