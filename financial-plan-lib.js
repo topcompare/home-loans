@@ -79,13 +79,13 @@ var FinancialPlan = {
 	registrationFeesDiscount: 0,
 	registrationDiscountedFees: 0,
 	totalAcquisitionCost: 0,
-	loanAmount: 300000,
+	loanAmount: 150000,
 	mortgageFixedFees: 0,
 	mortgageVariableFees: 0,
 	mortgageTotalFees: 0,
 	totalAmountWithMortgage: 0,
 	repaymentSchedule: [],
-	annualRate: 0.025,
+	annualRate: 0.033,
 	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
 	get monthlyRate() { return (1+this.annualRate)**(1/12)-1 },
   
@@ -102,6 +102,36 @@ var FinancialPlan = {
 			}
 		}
 	},
+  
+    /**
+    * Determines the monthly payment given a loan amount, the interest rate and the number of payment periods
+    * @param {Number} ir   - interest rate per month
+    * @param {Number} np   - number of periods (months)
+    * @param {Number} pv   - present value
+    * @param {Number} fv   - future value
+    * @param {Boolean} type - when the payments are due:
+    *        0: end of the period, e.g. end of month (default)
+    *        1: beginning of period
+    * @return {Number} The value of the PMT (not rounded)
+    */
+    getPMT: function(ir = this.monthlyRate, np = this.durationYears * 12, pv = this.loanAmount, fv = 0, type = 0) {
+
+       var pmt, pvif;
+
+       fv || (fv = 0);
+       type || (type = 0);
+
+       if (ir === 0)
+           return -(pv + fv) / np;
+
+       pvif = Math.pow(1 + ir, np);
+       pmt = -ir * pv * (pvif + fv) / (pvif - 1);
+
+       if (type === 1)
+           pmt /= (1 + ir);
+
+       return pmt;
+    },
 
 	// Methods used for simulations
 	calcNotaryFees() {
@@ -145,33 +175,30 @@ var FinancialPlan = {
 		// Make the sum for the total project cost
         this.totalAmountWithMortgage = this.totalAcquisitionCost + this.mortgageTotalFees;
 	},
-
+  
 	calcSchedule() {
-		//this.monthlyPayment = (this.monthlyRate * this.totalAmountWithMortgage) / ((1 - (1 + this.monthlyRate) ** (-(12*this.durationYears))));
-		this.monthlyPayment = ( this.monthlyRate * ( this.loanAmount * ( (this.monthlyRate+1)**(12*this.durationYears) ) ) ) / ( ( this.monthlyRate + 1 ) * ( (this.monthlyRate+1)**(12*this.durationYears) -1 ) );
+		this.monthlyPayment = Math.round((-this.getPMT() + Number.EPSILON) * 100) / 100;
 		let schedule = [];
 		schedule.length = (12*this.durationYears);
-		/*incrementDate = function () {
-			moment(date).add(1, 'month');
-			return date;
-		};*/
 		schedule[0] = {
-			//date: incrementDate(),
 			payment: this.monthlyPayment,
-			principal: this.monthlyPayment - this.loanAmount * this.monthlyRate,
-			interest: this.loanAmount * this.monthlyRate,
-			balance: this.loanAmount - this.monthlyPayment
+			principal: this.monthlyPayment - Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100,
+			interest: Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100,
+			balance: this.loanAmount - (this.monthlyPayment - Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100)
 		};
 		for (let i = 1; i < (12 * this.durationYears); i++) {
+            let interest = Math.round((schedule[i - 1].balance * this.monthlyRate + Number.EPSILON) * 100) / 100;
+            let payment = Math.round(Math.min(this.monthlyPayment,schedule[i - 1].balance*(1+this.monthlyRate) + Number.EPSILON) * 100) / 100;
+            let principal = Math.round((payment - interest + Number.EPSILON) * 100) / 100;
 			schedule[i] = {
-				//date: incrementDate(),
-				payment: this.monthlyPayment,
-				principal: this.monthlyPayment - (schedule[i - 1].balance * (1 + this.monthlyRate) - this.monthlyPayment) * this.monthlyRate,
-				interest: (schedule[i - 1].balance * (1 + this.monthlyRate) - this.monthlyPayment) * this.monthlyRate,
-				balance: schedule[i - 1].balance * (1 + this.monthlyRate) - this.monthlyPayment
+				payment: payment,
+				principal: principal,
+				interest: interest,
+				balance: Math.round((schedule[i - 1].balance - principal + Number.EPSILON) * 100) / 100
 			};
 		}
 		this.repaymentSchedule = schedule;
+        return schedule;
 	},
 
     getCumulativeRepayment() {
@@ -180,7 +207,7 @@ var FinancialPlan = {
       	let schedule = [];
 		schedule.length = (12*this.durationYears);
       		schedule[0] = {
-			outstanding: Math.round((this.loanAmount - this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100 ,
+			outstanding: Math.round((this.loanAmount - this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100,
 			principal: Math.round((this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100,
 			interest: Math.round((this.repaymentSchedule[0].interest + Number.EPSILON) * 100) / 100
 		};
@@ -254,16 +281,15 @@ var FinancialPlan = {
 	getMaxProperty() {
 		this.propertyValue = 0;
 		let result = [];
-		let maxLoanAmount = this.updateMaxLoan();
+		let maxLoanAmount = this.getMaxLoan();
 		for (let years = 0; years < 31; years++) {
-			this.updateAcquisitionCost();
+			this.getAcquisitionCost();
 			while (this.loanAmount < maxLoanAmount[years]) {
 				this.propertyValue += 1000;
-				this.updateAcquisitionCost();
+				this.getAcquisitionCost();
 			}
 			result[years] = this.propertyValue;
 		}
 		return result;
 	}
 };
-
