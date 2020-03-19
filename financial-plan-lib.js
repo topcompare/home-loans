@@ -14,7 +14,25 @@ Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working
 */
 
 var FinancialPlan = {
-	// Constants related to the market
+  	// Default user values of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
+	propertyValue: 200000,
+	region: "brussels", // Can take either "brussels", "wallonia" or "brussels"
+	firstProperty: true, // Whether one can benefit from the first time buy and owner occupied discount 
+	walloniaDiscount: false, // Whether the 'reduced rate' for modest housing is applicable (reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste)
+	ownFunds: 100000, // Own funds one can bring
+	durationYears: 20,
+	income: 5000, // All net monthly income one has
+	charges: 0, // All total monthly charges one has (without the future mortgage charges)
+	annualRate: 0.033, // Assumption of the annual interest rate used for all calculations
+	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
+	get monthlyRate() { return (1+this.annualRate)**(1/12)-1 },
+  
+    // Setting lending assumptions
+	maxDebtRatio: 0.45, // Debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
+    maxDurationYears: 25, // Sets the maximum duration allowed (typically, it is more 25 years nowadays)
+    NAI: 1000, // the net available income must be at least 1000€ (1200€ with co-applicant)
+  
+	// Setting constants
 	regionalFees: { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
 	notaryFixedCost: 2178,
 	discountValue: 160353,
@@ -61,16 +79,8 @@ var FinancialPlan = {
 	notaryFixedRateCol: 2,
 	mortgagePercentageCol: 1,
 	mortgageFixedRateCol: 2,
-
-	// Default parameters of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
-	propertyValue: 200000,
-	region: "brussels",
-	firstProperty: true,
-	walloniaDiscount: false,
-	ownFunds: 100000,
-	durationYears: 20,
-	income: 5000,
-	charges: 0,
+  
+    // Declaring the variables used 
 	monthlyPayment: 0,
 	notaryFixedFees: 0,
 	notaryVariableFees: 0,
@@ -85,9 +95,6 @@ var FinancialPlan = {
 	mortgageTotalFees: 0,
 	totalAmountWithMortgage: 0,
 	repaymentSchedule: [],
-	annualRate: 0.033,
-	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
-	get monthlyRate() { return (1+this.annualRate)**(1/12)-1 },
   
 	// Auxiliary function to navigate the matrices
 	getStaircaseRow: function (matrix, value) {
@@ -115,7 +122,6 @@ var FinancialPlan = {
     * @return {Number} The value of the PMT (not rounded)
     */
     getPMT: function(ir = this.monthlyRate, np = this.durationYears * 12, pv = this.loanAmount, fv = 0, type = 0) {
-
        var pmt, pvif;
 
        fv || (fv = 0);
@@ -154,7 +160,7 @@ var FinancialPlan = {
         // Determine the registration fee. This is the main output of the function.
 		this.registrationInitialFees = this.propertyValue * this.regionalFees[this.region];
 		if (this.region == "flanders" && this.firstProperty) {
-			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * 0.07;
+			this.registrationDiscountedFees = (this.propertyValue - regionalDeduction) * 0.06;
 		} else if (this.region == "wallonia" && this.walloniaDiscount) {
 			this.registrationDiscountedFees = Math.min(this.propertyValue - regionalDeduction, this.discountValue) * 0.06 + Math.max(this.propertyValue - regionalDeduction - this.discountValue, 0) * this.regionalFees[this.region];
 		} else {
@@ -198,11 +204,14 @@ var FinancialPlan = {
 			};
 		}
 		this.repaymentSchedule = schedule;
-        return schedule;
 	},
 
+    /**
+    * Determines the cumulative repayment over time. This allows to build curves over time, with cumulative interest and principal pay, and decreasing outstanding debt
+    * @return {Array}      Every item in the array contains for a given month the outstanding debt, the total principal repayment and the total interest charge paid. The length is the loan tenure in months (years *12)
+    */
     getCumulativeRepayment() {
-        // make sure the repayment schedule is calcuated
+        // make sure the repayment schedule is calcuated first
         this.calcSchedule();
       	let schedule = [];
 		schedule.length = (12*this.durationYears);
@@ -213,9 +222,9 @@ var FinancialPlan = {
 		};
 		for (let i = 1; i < (12 * this.durationYears); i++) {
 			schedule[i] = {
-				outstanding: schedule[i-1].outstanding - Math.round((this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
-				principal: schedule[i-1].principal + Math.round((this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
-				interest: schedule[i-1].interest + Math.round((this.repaymentSchedule[i].interest + Number.EPSILON) * 100) / 100
+				outstanding: Math.round((schedule[i-1].outstanding - this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
+				principal: Math.round((schedule[i-1].principal + this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
+				interest: Math.round((schedule[i-1].interest + this.repaymentSchedule[i].interest + Number.EPSILON) * 100) / 100
 			};
 		}
       return schedule;
@@ -243,25 +252,22 @@ var FinancialPlan = {
 
     /**
     * Determine the maximum loan amount given revenues and charges. It assumes conservative debt ratio
-    * @param  {Number} arbitraryMonthlyPayment Optional: Set the monthly installment instead of using the maximum value given the allowed debt ratio
+    * @param  {Number}     arbitraryMonthlyPayment Optional: Set the monthly installment instead of using the maximum value given the allowed debt ratio
     * @return {array}      The maximum loan amount for each duration (0 to 30 years)
     */
 	getMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
-		// assumptions: debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
-		let maxDebtRatio = 0.45;
-
 		// if a monthly installment has been set, use it instead of the one deducted from the revenue and debt ratio
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
 		} else {
-			this.monthlyPayment = this.income * maxDebtRatio - this.charges;
+			this.monthlyPayment = this.income * this.maxDebtRatio - this.charges;
 		}		
 
 		// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
 		let result = [];
-		for (let years = 0; years < 31; years++) {
-			// the NAI must be at least 1000€ (1200€ with co-applicant) to be eligibile for a loan. Otherwise, return 0
-			if (this.income - this.charges - this.monthlyPayment < 1000) {
+		for (let years = 0; years < this.maxDurationYears; years++) {
+			// the remaining net available income needs to be above a certain threshold to be eligibile for a loan. Otherwise, return 0
+			if (this.income - this.charges - this.monthlyPayment < this.NAI) {
 				result[years] = 0;
 			} else {
 				// Reference: http://www.iotafinance.com/en/Formula-Maximum-Loan-Amount.html
@@ -282,7 +288,7 @@ var FinancialPlan = {
 		this.propertyValue = 0;
 		let result = [];
 		let maxLoanAmount = this.getMaxLoan();
-		for (let years = 0; years < 31; years++) {
+		for (let years = 0; years < this.maxDurationYears; years++) {
 			this.getAcquisitionCost();
 			while (this.loanAmount < maxLoanAmount[years]) {
 				this.propertyValue += 1000;
