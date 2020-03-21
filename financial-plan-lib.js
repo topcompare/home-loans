@@ -21,7 +21,7 @@ var FinancialPlan = {
 	walloniaDiscount: false, // Whether the 'reduced rate' for modest housing is applicable (reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste)
 	ownFunds: 100000, // Own funds one can bring
 	durationYears: 20,
-	income: 5000, // All net monthly income one has
+	income: 2000, // All net monthly income one has
 	charges: 0, // All total monthly charges one has (without the future mortgage charges)
 	annualRate: 0.033, // Assumption of the annual interest rate used for all calculations
 	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
@@ -121,7 +121,7 @@ var FinancialPlan = {
     *        1: beginning of period
     * @return {Number} The value of the PMT (not rounded)
     */
-    getPMT: function(ir = this.monthlyRate, np = this.durationYears * 12, pv = this.loanAmount, fv = 0, type = 0) {
+    getPMT: function(ir = this.monthlyRate, np = this.durationYears * 12, pv = -this.loanAmount, fv = 0, type = 0) {
        var pmt, pvif;
 
        fv || (fv = 0);
@@ -145,7 +145,6 @@ var FinancialPlan = {
 		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * this.VAT + this.notaryFixedCost;
 		this.notaryVariableFees = notaryVariablePercentage * this.propertyValue;
 		this.notaryTotalFees = this.notaryFixedFees + this.notaryVariableFees;
-		this.totalAcquisitionCost += this.notaryTotalFees;
 	},
 
 	calcRegistrationFees() {
@@ -168,8 +167,8 @@ var FinancialPlan = {
 		}
         // For detailed breakdown, determine the registration discount by difference
 		this.registrationFeesDiscount = this.registrationInitialFees - this.registrationDiscountedFees;
-        // For the total, set the total acqusition cost
-        this.totalAcquisitionCost += this.registrationDiscountedFees;
+        // REMOVE? For the total, set the total acqusition cost
+        //this.totalAcquisitionCost += this.registrationDiscountedFees;
     },
 
 	calcMortgageFees() {
@@ -178,12 +177,11 @@ var FinancialPlan = {
 		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgageFixedRateCol];
 		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgagePercentageCol] * this.loanAmount - this.loanAmount;
 		this.mortgageTotalFees = this.mortgageFixedFees + this.mortgageVariableFees;
-		// Make the sum for the total project cost
-        this.totalAmountWithMortgage = this.totalAcquisitionCost + this.mortgageTotalFees;
+
 	},
   
 	calcSchedule() {
-		this.monthlyPayment = Math.round((-this.getPMT() + Number.EPSILON) * 100) / 100;
+		this.monthlyPayment = Math.round((this.getPMT() + Number.EPSILON) * 100) / 100;
 		let schedule = [];
 		schedule.length = (12*this.durationYears);
 		schedule[0] = {
@@ -231,8 +229,12 @@ var FinancialPlan = {
     },
 
     /**
-    * Determine the total project cost
-    * @return {Number}      The maximum loan amount for each duration (0 to 30 years)
+    * Determine the total project cost without taking into account the funding (own funds and the loan) and given the property value, the region, the first buy and reduced rate for Wallonia (not passed as parameters but read from the object variables).
+    * In order to retrieve the components of that sum, you can read the variables that have been set along the way:
+    * - Registration rights: FinancialPlan.registrationDiscountedFees
+    * - Notary fees: FinancialPlan.notaryTotalFees
+    * - Mortgage fees: FinancialPlan.mortgageTotalFees
+    * @return {Number}      The total project cost
     */
 	getAcquisitionCost() {
 		// Default own funds to 20% of property value if unset
@@ -240,12 +242,15 @@ var FinancialPlan = {
 			this.ownFunds = 0.2 * this.propertyValue;
 		}
 
-		this.totalAcquisitionCost = this.propertyValue;
+        // Run all the calculations
 		this.calcRegistrationFees();
 		this.calcNotaryFees();
 		this.calcMortgageFees();
 		this.calcSchedule();
-		
+	
+        // Make the sum for the total project cost
+        this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.registrationDiscountedFees;
+      
         // Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
 	},
@@ -260,7 +265,7 @@ var FinancialPlan = {
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
 		} else {
-			this.monthlyPayment = this.income * this.maxDebtRatio - this.charges;
+			this.monthlyPayment = Math.min(this.income * this.maxDebtRatio - this.charges, this.income - this.NAI);
 		}		
 
 		// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
@@ -282,7 +287,7 @@ var FinancialPlan = {
 
     /**
     * Determine the maximum value of the property given the borrowing capacity
-    * @return {array}      The maximum property value for each duration (0 to 30 years)
+    * @return {array}      The maximum property value for each duration (0 to n years)
     */
 	getMaxProperty() {
 		this.propertyValue = 0;
