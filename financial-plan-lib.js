@@ -234,6 +234,7 @@ var FinancialPlan = {
     * - Registration rights: FinancialPlan.registrationDiscountedFees
     * - Notary fees: FinancialPlan.notaryTotalFees
     * - Mortgage fees: FinancialPlan.mortgageTotalFees
+    * - Property value: FinancialPlan.propertyValue
     * @return {Number}      The total project cost
     */
 	getAcquisitionCost() {
