@@ -308,8 +308,8 @@ var FinancialPlan = {
 				result[years] = Math.round(principal/100)*100;
 			}
 		}
-        // Update the global variable for other functions to use the latest value (e.g. the amortization schedule)
-        this.loanAmount = result[this.durationYears + 1];
+       		 // Update the global variable for other functions to use the latest value (e.g. the amortization schedule)
+        	this.loanAmount = result[this.durationYears - 1];
 		return result;
 	},
 
