@@ -180,53 +180,78 @@ var FinancialPlan = {
 
 	},
   
-	calcSchedule() {
+    /**
+    * Determines the repayment over time, in months. This allows to build a monthly amortization table and to plot charts (as the monthly data provides more granularity)
+    * @return {Array}      Every item in the array contains for a given month the following elements. The length is the loan tenure in months (years *12)
+    * @return {Array}.payment              the monthly payment, as determined by getPMT() 
+    * @return {Array}.principalPayment     the principal payment, i.e. the principal reimbursement component of the monthly payment
+    * @return {Array}.principalCumulative  the running sum of all principal payments 
+    * @return {Array}.interestPayment      th monthly interest payment, i.e. the interest component of the monthly payment
+    * @return {Array}.interestCumulative   the running sum of all interest payments
+    * @return {Array}.balance              the outstanding balance, i.e. the total initial loan amount minus the downpayments over time 
+    */
+	getScheduleMonthly() {
 		this.monthlyPayment = Math.round((this.getPMT() + Number.EPSILON) * 100) / 100;
 		let schedule = [];
 		schedule.length = (12*this.durationYears);
 		schedule[0] = {
-			payment: this.monthlyPayment,
-			principal: this.monthlyPayment - Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100,
-			interest: Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100,
-			balance: this.loanAmount - (this.monthlyPayment - Math.round((this.loanAmount * this.monthlyRate + Number.EPSILON) * 100) / 100)
+			payment: 0,
+			principalPayment: 0,
+            principalCumulative: 0,
+			interestPayment: 0,
+            interestCumulative: 0,
+			balance: this.loanAmount
 		};
-		for (let i = 1; i < (12 * this.durationYears); i++) {
+		for (let i = 1; i <= (12 * this.durationYears); i++) {
             let interest = Math.round((schedule[i - 1].balance * this.monthlyRate + Number.EPSILON) * 100) / 100;
+            // Monthly payment is either the monthly installment (determined by getPMT()) or the remaining balance at the end of the term
             let payment = Math.round(Math.min(this.monthlyPayment,schedule[i - 1].balance*(1+this.monthlyRate) + Number.EPSILON) * 100) / 100;
             let principal = Math.round((payment - interest + Number.EPSILON) * 100) / 100;
 			schedule[i] = {
 				payment: payment,
-				principal: principal,
-				interest: interest,
+				principalPayment: principal,
+                principalCumulative: Math.round((schedule[i-1].principalCumulative + principal + Number.EPSILON) * 100) / 100,
+				interestPayment: interest,
+                interestCumulative: Math.round((schedule[i-1].interestCumulative + interest + Number.EPSILON) * 100) / 100,
 				balance: Math.round((schedule[i - 1].balance - principal + Number.EPSILON) * 100) / 100
 			};
 		}
 		this.repaymentSchedule = schedule;
+        return schedule;
 	},
 
     /**
-    * Determines the cumulative repayment over time. This allows to build curves over time, with cumulative interest and principal pay, and decreasing outstanding debt
-    * @return {Array}      Every item in the array contains for a given month the outstanding debt, the total principal repayment and the total interest charge paid. The length is the loan tenure in months (years *12)
+    * Same as getScheduleMonthly but aggregated on a yearly basisDetermines the repayment over time, in months. This allows to build a monthly amortization table and to plot charts (as the monthly data provides more granularity)
+    * @return {Object}      Every element contains an array contains with all the data per year
+    * @return {Object}.principal {Array}    cumulative principal reimbursement for each year 
+    * @return {Object}.interest {Array}     cumulative interest payments for each year 
+    * @return {Object}.balance {Array}      the outstanding balance per year 
     */
-    getCumulativeRepayment() {
-        // make sure the repayment schedule is calcuated first
-        this.calcSchedule();
-      	let schedule = [];
-		schedule.length = (12*this.durationYears);
-      		schedule[0] = {
-			outstanding: Math.round((this.loanAmount - this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100,
-			principal: Math.round((this.repaymentSchedule[0].principal + Number.EPSILON) * 100) / 100,
-			interest: Math.round((this.repaymentSchedule[0].interest + Number.EPSILON) * 100) / 100
-		};
-		for (let i = 1; i < (12 * this.durationYears); i++) {
-			schedule[i] = {
-				outstanding: Math.round((schedule[i-1].outstanding - this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
-				principal: Math.round((schedule[i-1].principal + this.repaymentSchedule[i].principal + Number.EPSILON) * 100) / 100,
-				interest: Math.round((schedule[i-1].interest + this.repaymentSchedule[i].interest + Number.EPSILON) * 100) / 100
-			};
-		}
-      return schedule;
-    },
+	getScheduleYearly() {
+        let repaymentMonths = this.getScheduleMonthly() || [];
+        let schedule = {
+            balance: [],
+            interest: [],
+            principal: []
+        };
+        repaymentMonths.map(function (month, index) {
+        if (index === 0) {
+            schedule.balance.push(month.balance);
+        } else if (index % 12 === 0 && index !== 0) {
+            let year = repaymentMonths[index];
+            schedule.interest.push(year.interestCumulative);
+            schedule.principal.push(year.principalCumulative);
+            schedule.balance.push(year.balance);
+        } else if (index === repaymentMonths.length -1) {
+            // last month = last year
+            schedule.interest.push(month.interest);
+            schedule.principal.push(month.principal);
+            schedule.balance.push(month.outstanding);
+        }
+            });
+        return schedule;
+	},
+  
 
     /**
     * Determine the total project cost without taking into account the funding (own funds and the loan) and given the property value, the region, the first buy and reduced rate for Wallonia (not passed as parameters but read from the object variables).
@@ -247,7 +272,7 @@ var FinancialPlan = {
 		this.calcRegistrationFees();
 		this.calcNotaryFees();
 		this.calcMortgageFees();
-		this.calcSchedule();
+		// Not sure commenting out this line has no impact: this.getScheduleMonthly();
 	
         // Make the sum for the total project cost
         this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.registrationDiscountedFees;
@@ -283,6 +308,8 @@ var FinancialPlan = {
 				result[years] = Math.round(principal/100)*100;
 			}
 		}
+        // Update the global variable for other functions to use the latest value (e.g. the amortization schedule)
+        this.loanAmount = result[this.durationYears + 1];
 		return result;
 	},
 
