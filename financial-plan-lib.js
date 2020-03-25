@@ -29,7 +29,7 @@ var FinancialPlan = {
   
     // Setting lending assumptions
 	maxDebtRatio: 0.45, // Debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
-    maxDurationYears: 25, // Sets the maximum duration allowed (typically, it is more 25 years nowadays)
+    maxDurationYears: 30, // Sets the maximum duration allowed (typically, it is more 25 years nowadays)
     NAI: 1000, // the net available income must be at least 1000€ (1200€ with co-applicant)
   
 	// Setting constants
@@ -167,8 +167,6 @@ var FinancialPlan = {
 		}
         // For detailed breakdown, determine the registration discount by difference
 		this.registrationFeesDiscount = this.registrationInitialFees - this.registrationDiscountedFees;
-        // REMOVE? For the total, set the total acqusition cost
-        //this.totalAcquisitionCost += this.registrationDiscountedFees;
     },
 
 	calcMortgageFees() {
@@ -193,7 +191,7 @@ var FinancialPlan = {
 	getScheduleMonthly() {
 		this.monthlyPayment = Math.round((this.getPMT() + Number.EPSILON) * 100) / 100;
 		let schedule = [];
-		schedule.length = (12*this.durationYears);
+		let periods = (12*this.durationYears);
 		schedule[0] = {
 			payment: 0,
 			principalPayment: 0,
@@ -202,10 +200,10 @@ var FinancialPlan = {
             interestCumulative: 0,
 			balance: this.loanAmount
 		};
-		for (let i = 1; i <= (12 * this.durationYears); i++) {
+		for (let i = 1; i <= periods; i++) {
             let interest = Math.round((schedule[i - 1].balance * this.monthlyRate + Number.EPSILON) * 100) / 100;
             // Monthly payment is either the monthly installment (determined by getPMT()) or the remaining balance at the end of the term
-            let payment = Math.round(Math.min(this.monthlyPayment,schedule[i - 1].balance*(1+this.monthlyRate) + Number.EPSILON) * 100) / 100;
+            let payment = (i == periods) ? Math.round((schedule[i - 1].balance*(1+this.monthlyRate) + Number.EPSILON) * 100) / 100 : this.monthlyPayment;
             let principal = Math.round((payment - interest + Number.EPSILON) * 100) / 100;
 			schedule[i] = {
 				payment: payment,
@@ -228,27 +226,22 @@ var FinancialPlan = {
     * @return {Object}.balance {Array}      the outstanding balance per year 
     */
 	getScheduleYearly() {
-        let repaymentMonths = this.getScheduleMonthly() || [];
-        let schedule = {
-            balance: [],
-            interest: [],
-            principal: []
+        let scheduleMonthly = this.getScheduleMonthly() || [];
+        let schedule = [];
+        schedule[0] = {
+            balance: scheduleMonthly[0].balance,
+            interest: 0,
+            principal: 0
         };
-        repaymentMonths.map(function (month, index) {
-        if (index === 0) {
-            schedule.balance.push(month.balance);
-        } else if (index % 12 === 0 && index !== 0) {
-            let year = repaymentMonths[index];
-            schedule.interest.push(year.interestCumulative);
-            schedule.principal.push(year.principalCumulative);
-            schedule.balance.push(year.balance);
-        } else if (index === repaymentMonths.length -1) {
-            // last month = last year
-            schedule.interest.push(month.interest);
-            schedule.principal.push(month.principal);
-            schedule.balance.push(month.outstanding);
+        for (let i = 1; i <= scheduleMonthly.length; i++) {
+          if (i % 12 === 0 && i !== 0) {
+            schedule[ i / 12] = {
+              interest : scheduleMonthly[i].interestCumulative,
+              principal : scheduleMonthly[i].principalCumulative,
+              balance : scheduleMonthly[i].balance
+            }
+          } 
         }
-            });
         return schedule;
 	},
   
