@@ -16,27 +16,28 @@ Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working
 var FinancialPlan = {
   	// Default user values of the simulation. To be overriden with custom values: FinancialPlan.variableName = value
 	propertyValue: 200000,
+	newProperty: false, // If the property is new (< 2 years), it falls under the VAT regime. Otherwise, registration costs apply (reference: https://www.notaire.be/acheter-louer-emprunter/ventes-soumises-a-la-tva)
+	firstProperty: true, // Whether one can benefit from the first time buy and owner occupied discount
 	region: "brussels", // Can take either "brussels", "wallonia" or "brussels"
-	firstProperty: true, // Whether one can benefit from the first time buy and owner occupied discount 
 	walloniaDiscount: false, // Whether the 'reduced rate' for modest housing is applicable (reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste)
-	ownFunds: 100000, // Own funds one can bring
+	ownFunds: 50000, // Own funds one can bring
 	durationYears: 20,
 	income: 2000, // All net monthly income one has
-	charges: 0, // All total monthly charges one has (without the future mortgage charges)
+	charges: 0, // All total monthly credit charges one has (without the future mortgage charges, and of course excluding household charges)
 	annualRate: 0.033, // Assumption of the annual interest rate used for all calculations
-	//  binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
+	// binds the monthly rate property to a function of the annual rate. Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
 	get monthlyRate() { return (1+this.annualRate)**(1/12)-1 },
   
-    // Setting lending assumptions
+   	// Setting lending assumptions
 	maxDebtRatio: 0.45, // Debt ratio can be max 45% (dixit HypoConnect, otherwise 1/3 to be more conservative), of the net available income
     maxDurationYears: 30, // Sets the maximum duration allowed (typically, it is more 25 years nowadays)
-    NAI: 1000, // the net available income must be at least 1000€ (1200€ with co-applicant)
+   	NAI: 1000, // the net available income must be at least 1000€ (1200€ with co-applicant)
   
 	// Setting constants
 	regionalFees: { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
 	notaryFixedCost: 2178,
 	discountValue: 160353,
-	VAT: 1.21,
+	VAT: 0.21,
 	notaryMatrix: [
 		[0, 0.0456, 0],
 		[7500, 0.0285, 128.25],
@@ -141,8 +142,8 @@ var FinancialPlan = {
 
 	// Methods used for simulations
 	calcNotaryFees() {
-		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * this.VAT;
-		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * this.VAT + this.notaryFixedCost;
+		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * (1 + this.VAT);
+		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * (1 + this.VAT) + this.notaryFixedCost;
 		this.notaryVariableFees = notaryVariablePercentage * this.propertyValue;
 		this.notaryTotalFees = this.notaryFixedFees + this.notaryVariableFees;
 	},
@@ -253,23 +254,31 @@ var FinancialPlan = {
     * - Notary fees: FinancialPlan.notaryTotalFees
     * - Mortgage fees: FinancialPlan.mortgageTotalFees
     * - Property value: FinancialPlan.propertyValue
+	* @param  {Boolean}     regimeVAT Optional: Set the tax regime (true for VAT, false for registration fees) instead of using the default value
     * @return {Number}      The total project cost
     */
-	getAcquisitionCost() {
+	getAcquisitionCost(/*boolean*/ regimeVAT = undefined) {
+		// if the tax regime has been set (to true, for instance), use it instead of the default value of newProperty
+		if (regimeVAT != undefined) {
+			this.newProperty = regimeVAT;
+		}
+		
 		// Default own funds to 20% of property value if unset
 		if (this.ownFunds == undefined) {
 			this.ownFunds = 0.2 * this.propertyValue;
 		}
 
         // Run all the calculations
-		this.calcRegistrationFees();
+		this.calcRegistrationFees(); // Note: only relevant if purchase is not under VAT regime
 		this.calcNotaryFees();
 		this.calcMortgageFees();
-		// Not sure commenting out this line has no impact: this.getScheduleMonthly();
 	
-        // Make the sum for the total project cost
-        this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.registrationDiscountedFees;
-      
+        // Make the sum for the total project cost, depending on the tax regime
+        if (this.newProperty) {
+			this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.propertyValue * this.VAT;
+		} else {
+			this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.registrationDiscountedFees;
+		}
         // Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
 	},
@@ -284,7 +293,7 @@ var FinancialPlan = {
 		if (arbitraryMonthlyPayment != undefined) {
 			this.monthlyPayment = arbitraryMonthlyPayment;
 		} else {
-			this.monthlyPayment = Math.min(this.income * this.maxDebtRatio - this.charges, this.income - this.NAI);
+			this.monthlyPayment = Math.max(Math.min(this.income * this.maxDebtRatio - this.charges, this.income - this.NAI),0);
 		}		
 
 		// compute the maximum loan amount for the different durations (from 0 years to 30) and store it in an array
