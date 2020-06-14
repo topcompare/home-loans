@@ -34,9 +34,9 @@ var FinancialPlan = {
    	NAI: 1000, // the net available income must be at least 1000€ (1200€ with co-applicant)
   
 	// Setting constants
-	regionalFees: { brussels: 0.125, wallonia: 0.125, flanders: 0.1 },
+	regionalFees: { brussels: 0.125, wallonia: 0.125, flanders: 0.1 }, //obsolete (defined in function)
 	notaryFixedCost: 2178,
-	discountValue: 160353,
+	discountValue: 160353, //obsolete (defined in function)
 	VAT: 0.21,
 	notaryMatrix: [
 		[0, 0.0456, 0],
@@ -140,15 +140,15 @@ var FinancialPlan = {
        return pmt;
     },
 
-	// Methods used for simulations
-	calcNotaryFees() {
+	// Methods reversed engineered from HypoConnect
+	calcNotaryFeesHC() {
 		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * (1 + this.VAT);
 		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * (1 + this.VAT) + this.notaryFixedCost;
 		this.notaryVariableFees = notaryVariablePercentage * this.propertyValue;
 		this.notaryTotalFees = this.notaryFixedFees + this.notaryVariableFees;
 	},
 
-	calcRegistrationFees() {
+	calcRegistrationFeesHC() {
 		let regionalDeduction = 0;
 		if (this.region == "brussels" && this.firstProperty && this.propertyValue <= 500000) {
 			regionalDeduction = Math.min(this.propertyValue, 175000);
@@ -169,13 +169,127 @@ var FinancialPlan = {
         // For detailed breakdown, determine the registration discount by difference
 		this.registrationFeesDiscount = this.registrationInitialFees - this.registrationDiscountedFees;
     },
-
-	calcMortgageFees() {
+  
+  	calcMortgageFeesHC() {
         // Determine mortgage fees (varies with the loan amount)
         this.loanAmount = this.propertyValue + this.notaryTotalFees + this.registrationDiscountedFees - this.ownFunds;
 		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgageFixedRateCol];
 		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgagePercentageCol] * this.loanAmount - this.loanAmount;
 		this.mortgageTotalFees = this.mortgageFixedFees + this.mortgageVariableFees;
+	},
+    
+    // Methods defined by TopCompare
+  	calcPurchaseDeedFees() {
+      let uniqueHome = this.firstProperty;
+      let propertyPrice = this.propertyValue;
+
+      let taxBase = propertyPrice;
+      let registrationFee = 0;
+      // Determine abatement
+      if (this.region == "brussels" && uniqueHome && this.propertyValue <= 500000) {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-bruxelloise-1/abattement-des-droits-d-enregistrement-a-bruxelles
+          taxBase -= Math.min(this.propertyValue, 175000);
+		} else if (this.region == "flanders" && uniqueHome && this.propertyValue <= 200000) {
+          // Reference: https://www.notaris.be/verkopen-kopen-huren-lenen/kopen-en-verkopen-1/registratiebelasting-in-het-vlaams-gewest-1/abattement
+          taxBase -= Math.min(this.propertyValue, 80000);
+		} else if (this.region == "wallonia" && uniqueHome) {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-wallonne-3/abattement-en-cas-dhabitation-unique
+          taxBase -= Math.min(this.propertyValue, 20000);
+      }
+      
+      // Determine amount subject to reduced tax rate
+      if (this.region == "wallonia" ) {
+        // Reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste
+		let tranche;
+        if (true) {
+           // Outside pressure zone (default)
+           tranche = 163125.56; // amount indexed on 01/01/2020
+        } else {
+           // Inside pressure zone: Arlon, Assesse, Aubel, Beauvechain, Braine-l'Alleud, Braine-le-Château, Burdinne, Chastre, Chaumont-Gistoux, Court-Saint-Etienne, Flobecq, Geer, Genappe, Gesves, Grez-Doiceau, Incourt, Ittre, Jalhay, Jodoigne, La Bruyère, La Hulpe, Lasne, Mont-Saint-Guibert, Nivelles, Ottignies-Louvain-la-Neuve, Perwez (Nivelles), Ramillies, Rixensart, Silly, Sprimont, Thimister-Clermont, Tubize, Villers-la-Ville, Walhain, Waterloo and Wavre
+           tranche = 174000.61; // amount indexed on 01/01/2020   
+        }
+        registrationFee += (Math.min(tranche,taxBase) * 0.06); 
+        taxBase -= Math.min(tranche,taxBase);
+      }   
+     
+      
+      // Determine registration fee
+      if (this.region == "brussels") {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-bruxelloise-1
+          registrationFee += taxBase * 0.125;
+      } else if (this.region == "flanders" ) {
+          // Reference: https://www.notaris.be/verkopen-kopen-huren-lenen/kopen-en-verkopen-1/registratiebelasting-in-het-vlaams-gewest-1
+          if (uniqueHome) {
+            registrationFee += taxBase * 0.06;
+          } else {
+            registrationFee += taxBase * 0.10;
+          }
+      } else if (this.region == "wallonia") {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-wallonne-3/abattement-en-cas-dhabitation-unique
+          registrationFee += taxBase * 0.125;
+      }
+
+      // Determine notary fee
+      var notaryMatrix = [ // header: bracket, fee percentage, cumulative fee
+		[0, 0.0456, 0],
+		[7500, 0.0285, 342.00],
+		[17500, 0.0228, 627.00],
+		[30000, 0.0171, 912.00],
+		[45495, 0.0114, 1176.9645],
+		[64095, 0.0057, 1389.0045],
+		[250095, 0.00057, 2449.2045]
+      ];
+      let stepPercent = notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][1];
+      let stepAmount = this.propertyValue - notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][0] ;
+      let stepCumulative = notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][2];
+      let notaryFee = Math.round((stepPercent * stepAmount + stepCumulative + Number.EPSILON) * 100) / 100;     
+         
+      // Add administrative fees
+      let administrativeFee = Math.max(800.00,1100.00);
+      
+      // Apply VAT
+      let VAT = Math.round(((notaryFee + administrativeFee) * 0.21 + Number.EPSILON) * 100) / 100;
+      
+      // Mortgage transcription 
+      let transcription = 230.00;
+  
+      // Return object with total fee purchase deed fees and breakdown
+      return {
+        amount: Math.round((registrationFee + notaryFee + administrativeFee + VAT + transcription + Number.EPSILON) * 100) / 100,
+        localeFR: "Frais de notaire d’acte d’achat",
+        localeNL: "Aankoopkosten",
+  
+        registrationFee: {
+          amount: Math.round((registrationFee + Number.EPSILON) * 100) / 100,
+          localeFR: "Frais d’enregistrement",
+          localeNL: "Registratiebelasting/rechten"
+        },
+        notaryFee: {
+          amount: notaryFee,
+          localeFR: "Honoraires",
+          localeNL: "Ereloon"
+        },
+        administrativeFee: {
+          amount: administrativeFee,
+          localeFR: "Frais administratifs",
+          localeNL: "Administratieve kosten"
+        },
+        transcription: {
+          amount: transcription,
+          localeFR: "Transcription hypothécaire",
+          localeNL: "Kosten overschrijving"
+        },
+        vat: {
+          amount: VAT,
+          localeFR: "TVA",
+          localeNL: "BTW"
+        }
+      };
+      
+    },
+
+  	calcMortgageDeedFees() {
+
 
 	},
   
