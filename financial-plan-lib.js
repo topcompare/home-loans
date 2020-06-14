@@ -210,8 +210,7 @@ var FinancialPlan = {
         }
         registrationFee += (Math.min(tranche,taxBase) * 0.06); 
         taxBase -= Math.min(tranche,taxBase);
-      }   
-     
+      }  
       
       // Determine registration fee
       if (this.region == "brussels") {
@@ -239,9 +238,9 @@ var FinancialPlan = {
 		[64095, 0.0057, 1389.0045],
 		[250095, 0.00057, 2449.2045]
       ];
-      let stepPercent = notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][1];
-      let stepAmount = this.propertyValue - notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][0] ;
-      let stepCumulative = notaryMatrix[this.getStaircaseRow(notaryMatrix, this.propertyValue)][2];
+      let stepPercent = notaryMatrix[this.getStaircaseRow(notaryMatrix, propertyPrice)][1];
+      let stepAmount = propertyPrice - notaryMatrix[this.getStaircaseRow(notaryMatrix, propertyPrice)][0];
+      let stepCumulative = notaryMatrix[this.getStaircaseRow(notaryMatrix, propertyPrice)][2];
       let notaryFee = Math.round((stepPercent * stepAmount + stepCumulative + Number.EPSILON) * 100) / 100;     
          
       // Add administrative fees
@@ -253,7 +252,7 @@ var FinancialPlan = {
       // Mortgage transcription 
       let transcription = 230.00;
   
-      // Return object with total fee purchase deed fees and breakdown
+      // Return object with the total purchase deed fee and its breakdown
       return {
         amount: Math.round((registrationFee + notaryFee + administrativeFee + VAT + transcription + Number.EPSILON) * 100) / 100,
         localeFR: "Frais de notaire d’acte d’achat",
@@ -289,8 +288,90 @@ var FinancialPlan = {
     },
 
   	calcMortgageDeedFees() {
+      // The mortgage deed fees are variable with the total loan amount. The total loan amount is composed of the mortgage loan plus mortgage accessories, which is usually 10% of the mortgage loan. It covers registration supplements taken by the bank to cover the costs not covered by the main registration
+      let loanAmount = this.loanAmount * (1 + 0.1);
+      
+      // Mortgage registration rights
+      var registrationTax = 0.01 ; // 10% of total loan amount 
+      var appendixRight = 100; // fixed amount in EUR
+      var writingRight = 50; // fixed amount in EUR
+      // Mortgage office fees
+      var mortgageRegistrationRight = 0.003;
+      var retribution = (this.propertyValue < 272727) ? 220.00 : 950.00;
+ 
+      // Determine notary fee
+      /* The matrix values can be obtained from notaires.be and their javascript asset: https://calculate.notaris.be/static/js/main.03d69eda.js
+            var e = 1.71 * Math.min(t, 7500) / 100;
+            return t > 7500 && (e += 1.368 * (Math.min(t, 17500) - 7500) / 100), t > 17500 && (e += .912 * (Math.min(t, 3e4) - 17500) / 100), t > 3e4 && (e += .684 * (Math.min(t, 45495) - 3e4) / 100), t > 45495 && (e += .456 * (Math.min(t, 64095) - 45495) / 100), t > 64095 && (e += .228 * (Math.min(t, 250095) - 64095) / 100), t > 250095 && (e += .0456 * (t - 250095) / 100), e = Math.max(e, 8.55), parseInt(100 * (e + .005), 10) / 100
+      */
+      var notaryMatrix = [ // header: bracket, fee percentage, cumulative fee
+		[0, 0.0171, 0],
+		[7500, 0.01368, 128.2500],
+		[17500, 0.00912, 265.0500],
+		[30000, 0.00684, 379.0500],
+		[45495, 0.00456, 485.0358],
+		[64095, 0.00228, 569.8518],
+		[250095, 0.000456, 993.9318] 
+      ];
+      let stepPercent = notaryMatrix[this.getStaircaseRow(notaryMatrix, loanAmount)][1];
+      let stepAmount = loanAmount - notaryMatrix[this.getStaircaseRow(notaryMatrix, loanAmount)][0];
+      let stepCumulative = notaryMatrix[this.getStaircaseRow(notaryMatrix, loanAmount)][2];
+      let notaryFee = Math.round((stepPercent * stepAmount + stepCumulative + Number.EPSILON) * 100) / 100;
+      
+      // Add administrative fees
+      let administrativeFee = Math.max(700.00,1000.00);    
 
-
+      // Apply VAT
+      let VAT = Math.round(((notaryFee + administrativeFee + writingRight) * 0.21 + Number.EPSILON) * 100) / 100;
+ 
+      // Return object with the total mortgage deed fee and its breakdown
+      return {
+        amount: Math.round((registrationTax*loanAmount + appendixRight + writingRight + mortgageRegistrationRight*loanAmount + retribution + notaryFee + administrativeFee + VAT + Number.EPSILON) * 100) / 100,
+        localeFR: "Frais d’acte de crédit hypothécaire",
+        localeNL: "Kosten voor standaardkrediet",
+  
+        registrationTax: {
+          amount: Math.round((registrationTax*loanAmount + Number.EPSILON) * 100) / 100,
+          localeFR: "Droits d’enregistrement",
+          localeNL: "Registratiebelasting/rechten"
+        },
+        appendixRight: {
+          amount: appendixRight,
+          localeFR: "Droit pour les annexes",
+          localeNL: "Forfait registratie bijlage(n)"
+        },
+        writingRight: {
+          amount: writingRight,
+          localeFR: "Droit d'écriture",
+          localeNL: "Recht op geschriften"
+        },
+        mortgageRegistrationRight: {
+          amount: Math.round((mortgageRegistrationRight*loanAmount + Number.EPSILON) * 100) / 100,
+          localeFR: "Frais d'hypothèque - Droit d'hypothèque",
+          localeNL: "Hypotheekkosten - Hypotheekrecht"
+        },
+        retribution: {
+          amount: retribution,
+          localeFR: "Frais d'hypothèque - Rétribution",
+          localeNL: "Hypotheekkosten - Retributie"
+        },        
+        notaryFee: {
+          amount: notaryFee,
+          localeFR: "Honoraires",
+          localeNL: "Ereloon"
+        },        
+        administrativeFee: {
+          amount: administrativeFee,
+          localeFR: "Frais administratifs",
+          localeNL: "Administratieve kosten"
+        },        
+        VAT: {
+          amount: VAT,
+          localeFR: "TVA",
+          localeNL: "BTW"
+        }
+      };
+      
 	},
   
     /**
@@ -382,16 +463,18 @@ var FinancialPlan = {
 			this.ownFunds = 0.2 * this.propertyValue;
 		}
 
-        // Run all the calculations
-		this.calcRegistrationFees(); // Note: only relevant if purchase is not under VAT regime
-		this.calcNotaryFees();
-		this.calcMortgageFees();
+        // Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
+		//this.calcRegistrationFeesHC(); // Note: only relevant if purchase is not under VAT regime
+		//this.calcNotaryFeesHC();
+		//this.calcMortgageFeesHC();
+        let purchaseDeedFees = this.calcPurchaseDeedFees();
+        let mortgageDeedFees = this.calcMortgageDeedFees();
 	
         // Make the sum for the total project cost, depending on the tax regime
         if (this.newProperty) {
-			this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.propertyValue * this.VAT;
+			this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount + this.propertyValue * this.VAT;
 		} else {
-			this.totalAmountWithMortgage = this.propertyValue + this.notaryTotalFees + this.mortgageTotalFees + this.registrationDiscountedFees;
+			this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount;
 		}
         // Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
