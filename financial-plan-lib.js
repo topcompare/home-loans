@@ -442,49 +442,49 @@ var FinancialPlan = {
 	},
   
 
-    /**
-    * Determine the total project cost without taking into account the funding (own funds and the loan) and given the property value, the region, the first buy and reduced rate for Wallonia (not passed as parameters but read from the object variables).
-    * In order to retrieve the components of that sum, you can read the variables that have been set along the way:
-    * - Registration rights: FinancialPlan.registrationDiscountedFees
-    * - Notary fees: FinancialPlan.notaryTotalFees
-    * - Mortgage fees: FinancialPlan.mortgageTotalFees
-    * - Property value: FinancialPlan.propertyValue
+	/**
+	* Determine the total project cost without taking into account the funding (own funds and the loan) and given the property value, the region, the first buy and reduced rate for Wallonia (not passed as parameters but read from the object variables).
+	* In order to retrieve the components of that sum, you can read the variables that have been set along the way:
+	* - Registration rights: FinancialPlan.registrationDiscountedFees
+	* - Notary fees: FinancialPlan.notaryTotalFees
+	* - Mortgage fees: FinancialPlan.mortgageTotalFees
+	* - Property value: FinancialPlan.propertyValue
 	* @param  {Boolean}     regimeVAT Optional: Set the tax regime (true for VAT, false for registration fees) instead of using the default value
-    * @return {Number}      The total project cost
-    */
+	* @return {Number}      The total project cost
+	*/
 	getAcquisitionCost(/*boolean*/ regimeVAT = undefined) {
 		// if the tax regime has been set (to true, for instance), use it instead of the default value of newProperty
 		if (regimeVAT != undefined) {
 			this.newProperty = regimeVAT;
 		}
 		
-		// Default own funds to 20% of property value if unset
+		// Default own funds to 10% of property value if unset
 		if (this.ownFunds == undefined) {
-			this.ownFunds = 0.2 * this.propertyValue;
+			this.ownFunds = 0.1 * this.propertyValue;
 		}
 
-        // Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
+      		  // Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
 		//this.calcRegistrationFeesHC(); // Note: only relevant if purchase is not under VAT regime
 		//this.calcNotaryFeesHC();
 		//this.calcMortgageFeesHC();
-        let purchaseDeedFees = this.calcPurchaseDeedFees();
-        let mortgageDeedFees = this.calcMortgageDeedFees();
+		let purchaseDeedFees = this.calcPurchaseDeedFees();
+		let mortgageDeedFees = this.calcMortgageDeedFees();
 	
-        // Make the sum for the total project cost, depending on the tax regime
-        if (this.newProperty) {
-			this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount + this.propertyValue * this.VAT;
-		} else {
-			this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount;
-		}
-        // Use rounding to ensure things like 1.005 round correctly
+		// Make the sum for the total project cost, depending on the tax regime
+		if (this.newProperty) {
+				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount + this.propertyValue * this.VAT;
+			} else {
+				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount;
+			}
+		// Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
 	},
 
-    /**
-    * Determine the maximum loan amount given revenues and charges. It assumes conservative debt ratio
-    * @param  {Number}     arbitraryMonthlyPayment Optional: Set the monthly installment instead of using the maximum value given the allowed debt ratio
-    * @return {array}      The maximum loan amount for each duration (0 to 30 years)
-    */
+	/**
+	* Determine the maximum loan amount given revenues and charges. It assumes conservative debt ratio
+	* @param  {Number}     arbitraryMonthlyPayment Optional: Set the monthly installment instead of using the maximum value given the allowed debt ratio
+	* @return {array}      The maximum loan amount for each duration (0 to 30 years)
+	*/
 	getMaxLoan(/*number*/ arbitraryMonthlyPayment = undefined) {
 		// if a monthly installment has been set, use it instead of the one deducted from the revenue and debt ratio
 		if (arbitraryMonthlyPayment != undefined) {
@@ -512,22 +512,27 @@ var FinancialPlan = {
 		return result;
 	},
 
-    /**
-    * Determine the maximum value of the property given the borrowing capacity
-    * @return {array}      The maximum property value for each duration (0 to n years)
-    */
+	/**
+	* Determine the maximum value of the property given the borrowing capacity
+	* @return {array}      The maximum property value for each duration (0 to n years)
+	*/
 	getMaxProperty() {
-		this.propertyValue = 0;
-		let result = [];
-		let maxLoanAmount = this.getMaxLoan();
-		for (let years = 0; years < this.maxDurationYears; years++) {
-			this.getAcquisitionCost();
-			while (this.loanAmount < maxLoanAmount[years]) {
-				this.propertyValue += 1000;
-				this.getAcquisitionCost();
-			}
-			result[years] = this.propertyValue;
+	let result = [];
+	// The borrowing capacity is a hard constraint. Retrieve it for the given profile (revenue, ...)
+	let maxLoanAmount = this.getMaxLoan();
+	// We will determine the property price by goal seeking, i.e. by increasing the price by increments while testing against the maximum possible
+	let increment = 1000;
+	this.propertyValue = 0;
+
+	// As the result depends on the duration, we create an array for every year
+	for (let years = 0; years < this.maxDurationYears; years++) {
+		// For as long as the loan needed to fund that property (given the own funds available) is within borrowing capacity, increment the property price
+		while (this.getAcquisitionCost() - this.ownFunds < maxLoanAmount[years]) {
+			this.propertyValue += increment;
 		}
-		return result;
+		result[years] = this.propertyValue;
+	}
+		
+	return result;
 	}
 };
