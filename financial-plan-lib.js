@@ -180,6 +180,7 @@ var FinancialPlan = {
     
     // Methods defined by TopCompare
   	calcPurchaseDeedFees() {
+      // NOTE: These variable names are more appropriate and self-explanatory. Keep the original ones for backwards compatibility
       let uniqueHome = this.firstProperty;
       let propertyPrice = this.propertyValue;
 
@@ -198,9 +199,10 @@ var FinancialPlan = {
       }
       
       // Determine amount subject to reduced tax rate
-      if (this.region == "wallonia" ) {
+      if (this.region == "wallonia" && this.walloniaDiscount) {
         // Reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste
-		let tranche;
+        let tranche;
+        // NOTE: the amount is dependent on the urban zone. Until this feature is implemented, we default to the lower amount
         if (true) {
            // Outside pressure zone (default)
            tranche = 163125.56; // amount indexed on 01/01/2020
