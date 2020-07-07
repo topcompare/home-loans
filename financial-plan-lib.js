@@ -178,9 +178,8 @@ var FinancialPlan = {
 		this.mortgageTotalFees = this.mortgageFixedFees + this.mortgageVariableFees;
 	},
     
-      // Methods defined by TopCompare
-      calcPurchaseDeedFees() {
-      // NOTE: These variable names are more appropriate and self-explanatory. Keep the original ones for backwards compatibility
+    // Methods defined by TopCompare
+  	calcPurchaseDeedFees() {
       let uniqueHome = this.firstProperty;
       let propertyPrice = this.propertyValue;
 
@@ -199,10 +198,9 @@ var FinancialPlan = {
       }
       
       // Determine amount subject to reduced tax rate
-      if (this.region == "wallonia" && this.walloniaDiscount) {
+      if (this.region == "wallonia" ) {
         // Reference: https://www.notaire.be/acheter-louer-emprunter/1-droits-d-enregistrement/en-region-wallonne-3/taux-reduit-en-cas-d-habitation-modeste
-        let tranche;
-        // NOTE: the amount is dependent on the urban zone. Until this feature is implemented, we default to the lower amount
+		let tranche;
         if (true) {
            // Outside pressure zone (default)
            tranche = 163125.56; // amount indexed on 01/01/2020
@@ -213,6 +211,22 @@ var FinancialPlan = {
         registrationFee += (Math.min(tranche,taxBase) * 0.06); 
         taxBase -= Math.min(tranche,taxBase);
       }  
+      
+      // Determine registration fee
+      if (this.region == "brussels") {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-bruxelloise-1
+          registrationFee += taxBase * 0.125;
+      } else if (this.region == "flanders" ) {
+          // Reference: https://www.notaris.be/verkopen-kopen-huren-lenen/kopen-en-verkopen-1/registratiebelasting-in-het-vlaams-gewest-1
+          if (uniqueHome) {
+            registrationFee += taxBase * 0.06;
+          } else {
+            registrationFee += taxBase * 0.10;
+          }
+      } else if (this.region == "wallonia") {
+          // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-wallonne-3/abattement-en-cas-dhabitation-unique
+          registrationFee += taxBase * 0.125;
+      }
 
       // Determine notary fee
       var notaryMatrix = [ // header: bracket, fee percentage, cumulative fee
