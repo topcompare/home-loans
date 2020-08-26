@@ -48,11 +48,6 @@ body.hl-rt .footer-container {
     }
 }
 
-/* Hide the column that contains the total reimbursement amount */
-body.hl-rt .metrics>div:nth-of-type(2) {
-    display: none !important;
-}
-
 /* Remove footer information on eligibility for non-eligible products (as the section title is explicity enough)*/
 .footer-container.score-ranking-no_chance > div > * > img, .footer-container.score-ranking-no_chance > div > * >.footer-primary {
     display: none;
@@ -130,7 +125,7 @@ body.hl-rt #results-container div#eligible-products .card-holder:first-child:bef
 }
 
 :lang(fr) body.hl-rt #results-container div#eligible-products:before {
-    content: 'Vos prêts hypothécaires préacceptés';
+    content: 'Vos prêts hypothécaires éligibles';
 }
 :lang(nl) body.hl-rt #results-container div#eligible-products:before {
     content: 'Leningen waarvoor je voorlopig bent goedgekeurd';
