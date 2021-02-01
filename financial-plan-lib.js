@@ -288,10 +288,10 @@ var FinancialPlan = {
       };
       
     },
-
-  	calcMortgageDeedFees() {
+	
+  calcMortgageDeedFees(/*number*/ principal = this.loanAmount) {
       // The mortgage deed fees are variable with the total loan amount. The total loan amount is composed of the mortgage loan plus mortgage accessories, which is usually 10% of the mortgage loan. It covers registration supplements taken by the bank to cover the costs not covered by the main registration
-      let loanAmount = this.loanAmount * (1 + 0.1);
+      let loanAmount = principal * (1 + 0.1);
       
       // Mortgage registration rights
       var registrationTax = 0.01 ; // 10% of total loan amount 
@@ -299,7 +299,7 @@ var FinancialPlan = {
       var writingRight = 50; // fixed amount in EUR
       // Mortgage office fees
       var mortgageRegistrationRight = 0.003;
-      var retribution = (this.propertyValue < 272727) ? 220.00 : 950.00;
+      var retribution = (this.loanAmount < 300000) ? 230.00 : 950.00;
  
       // Determine notary fee
       /* The matrix values can be obtained from notaires.be and their javascript asset: https://calculate.notaris.be/static/js/main.03d69eda.js
