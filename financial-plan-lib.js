@@ -38,7 +38,7 @@ var FinancialPlan = {
 	notaryFixedCost: 2178,
 	discountValue: 160353, //obsolete (defined in function)
 	VAT: 0.21,
-	notaryMatrix: [
+	notaryMatrix: [ // header: value, notaryPercentageCol, notaryFixedRateCol
 		[0, 0.0456, 0],
 		[7500, 0.0285, 128.25],
 		[17500, 0.0228, 228],
@@ -47,7 +47,7 @@ var FinancialPlan = {
 		[64095, 0.0057, 1023.663],
 		[250095, 0.00057, 2306.65035]
 	],
-	mortgageMatrix: [
+	mortgageMatrix: [ // header: value, mortgagePercentageCol, mortgageFixedRateCol
 		[-1902.44, 1.036259776191308, 1971.4220486173917],
 		[5335.127425000001, 1.0318350094994342, 1995.0287427444325],
 		[15026.599325, 1.0259937675598192, 2082.8027449314154],
@@ -76,10 +76,6 @@ var FinancialPlan = {
 		[464517.3641892, 1.0150756703892165, 3479.725138215983],
 		[488636.6149392, 1.0160765253564337, 3507.8061306480854]
 	],
-	notaryPercentageCol: 1,
-	notaryFixedRateCol: 2,
-	mortgagePercentageCol: 1,
-	mortgageFixedRateCol: 2,
   
     // Declaring the variables used 
 	monthlyPayment: 0,
@@ -142,8 +138,8 @@ var FinancialPlan = {
 
 	// Methods reversed engineered from HypoConnect
 	calcNotaryFeesHC() {
-		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryPercentageCol] * (1 + this.VAT);
-		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][this.notaryFixedRateCol] * (1 + this.VAT) + this.notaryFixedCost;
+		let notaryVariablePercentage = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][1] * (1 + this.VAT);
+		this.notaryFixedFees = this.notaryMatrix[this.getStaircaseRow(this.notaryMatrix, this.propertyValue)][2] * (1 + this.VAT) + this.notaryFixedCost;
 		this.notaryVariableFees = notaryVariablePercentage * this.propertyValue;
 		this.notaryTotalFees = this.notaryFixedFees + this.notaryVariableFees;
 	},
@@ -173,8 +169,8 @@ var FinancialPlan = {
   	calcMortgageFeesHC() {
         // Determine mortgage fees (varies with the loan amount)
         this.loanAmount = this.propertyValue + this.notaryTotalFees + this.registrationDiscountedFees - this.ownFunds;
-		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgageFixedRateCol];
-		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][this.mortgagePercentageCol] * this.loanAmount - this.loanAmount;
+		this.mortgageFixedFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][2];
+		this.mortgageVariableFees = this.mortgageMatrix[this.getStaircaseRow(this.mortgageMatrix, this.loanAmount)][1] * this.loanAmount - this.loanAmount;
 		this.mortgageTotalFees = this.mortgageFixedFees + this.mortgageVariableFees;
 	},
     
@@ -288,8 +284,8 @@ var FinancialPlan = {
       };
       
     },
-	
-  calcMortgageDeedFees(/*number*/ principal = this.loanAmount) {
+
+  	calcMortgageDeedFees(/*number*/ principal = this.loanAmount) {
       // The mortgage deed fees are variable with the total loan amount. The total loan amount is composed of the mortgage loan plus mortgage accessories, which is usually 10% of the mortgage loan. It covers registration supplements taken by the bank to cover the costs not covered by the main registration
       let loanAmount = principal * (1 + 0.1);
       
@@ -299,7 +295,7 @@ var FinancialPlan = {
       var writingRight = 50; // fixed amount in EUR
       // Mortgage office fees
       var mortgageRegistrationRight = 0.003;
-      var retribution = (this.loanAmount < 300000) ? 230.00 : 950.00;
+      var retribution = (loanAmount < 300000) ? 230.00 : 950.00;
  
       // Determine notary fee
       /* The matrix values can be obtained from notaires.be and their javascript asset: https://calculate.notaris.be/static/js/main.03d69eda.js
@@ -460,23 +456,23 @@ var FinancialPlan = {
 			this.newProperty = regimeVAT;
 		}
 		
-		// Default own funds to 10% of property value if unset
-		if (this.ownFunds == undefined) {
-			this.ownFunds = 0.1 * this.propertyValue;
-		}
+		// convert NaN (or empty string in this case) to 0 (source: https://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript)
+		this.ownFunds = this.ownFunds || 0;
 
-      		  // Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
+      	// Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
 		//this.calcRegistrationFeesHC(); // Note: only relevant if purchase is not under VAT regime
 		//this.calcNotaryFeesHC();
 		//this.calcMortgageFeesHC();
-		let purchaseDeedFees = this.calcPurchaseDeedFees();
-		let mortgageDeedFees = this.calcMortgageDeedFees();
-	
+		let purchaseDeedFees = this.calcPurchaseDeedFees().amount;
+		
+		// the mortgage deed fees are depending on the loan amount, the variable we are trying to determine through this function (it is a loop function). We can approximate it by determining the loan amount needed before covering the mortgage deed costs (TODO: and then inflate it by an estimated mortgage deed cost)
+		let mortgageDeedFees = this.calcMortgageDeedFees(this.propertyValue + purchaseDeedFees - this.ownFunds).amount;
+
 		// Make the sum for the total project cost, depending on the tax regime
 		if (this.newProperty) {
-				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount + this.propertyValue * this.VAT;
+				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees + mortgageDeedFees + this.propertyValue * this.VAT;
 			} else {
-				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees.amount + mortgageDeedFees.amount;
+				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees + mortgageDeedFees;
 			}
 		// Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
@@ -533,8 +529,9 @@ var FinancialPlan = {
 			this.propertyValue += increment;
 		}
 		result[years] = this.propertyValue;
-	}
+	}	
 		
 	return result;
 	}
+	
 };
