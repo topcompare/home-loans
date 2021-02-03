@@ -459,7 +459,7 @@ var FinancialPlan = {
 		// convert NaN (or empty string in this case) to 0 (source: https://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript)
 		this.ownFunds = this.ownFunds || 0;
 
-      	// Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
+      		// Run all the calculations - DEPRECATED (HypoConnect methods are replaced with TopCompare methods)
 		//this.calcRegistrationFeesHC(); // Note: only relevant if purchase is not under VAT regime
 		//this.calcNotaryFeesHC();
 		//this.calcMortgageFeesHC();
@@ -474,6 +474,9 @@ var FinancialPlan = {
 			} else {
 				this.totalAmountWithMortgage = this.propertyValue + purchaseDeedFees + mortgageDeedFees;
 			}
+		// Set the global variable for other functions to use the latest loan amount (e.g. PMT)
+		this.loanAmount = this.totalAmountWithMortgage - this.ownFunds;
+		
 		// Use rounding to ensure things like 1.005 round correctly
 		return Math.round((this.totalAmountWithMortgage + Number.EPSILON) * 100) / 100 ;
 	},
@@ -515,23 +518,23 @@ var FinancialPlan = {
 	* @return {array}      The maximum property value for each duration (0 to n years)
 	*/
 	getMaxProperty() {
-	let result = [];
-	// The borrowing capacity is a hard constraint. Retrieve it for the given profile (revenue, ...)
-	let maxLoanAmount = this.getMaxLoan();
-	// We will determine the property price by goal seeking, i.e. by increasing the price by increments while testing against the maximum possible
-	let increment = 1000;
-	this.propertyValue = 0;
+		let result = [];
+		// The borrowing capacity is a hard constraint. Retrieve it for the given profile (revenue, ...)
+		let maxLoanAmount = this.getMaxLoan();
+		// We will determine the property price by goal seeking, i.e. by increasing the price by increments while testing against the maximum possible
+		let increment = 1000;
+		this.propertyValue = 0;
 
-	// As the result depends on the duration, we create an array for every year
-	for (let years = 0; years < this.maxDurationYears; years++) {
-		// For as long as the loan needed to fund that property (given the own funds available) is within borrowing capacity, increment the property price
-		while (this.getAcquisitionCost() - this.ownFunds < maxLoanAmount[years]) {
-			this.propertyValue += increment;
-		}
-		result[years] = this.propertyValue;
-	}	
-		
-	return result;
+		// As the result depends on the duration, we create an array for every year
+		for (let years = 0; years < this.maxDurationYears; years++) {
+			// For as long as the loan needed to fund that property (given the own funds available) is within borrowing capacity, increment the property price
+			while (this.getAcquisitionCost() - this.ownFunds < maxLoanAmount[years]) {
+				this.propertyValue += increment;
+			}
+			result[years] = this.propertyValue;
+		}	
+
+		return result;
 	}
 	
 };
