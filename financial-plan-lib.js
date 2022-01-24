@@ -217,9 +217,9 @@ var FinancialPlan = {
       } else if (this.region == "flanders" ) {
           // Reference: https://www.notaris.be/verkopen-kopen-huren-lenen/kopen-en-verkopen-1/registratiebelasting-in-het-vlaams-gewest-1
           if (uniqueHome) {
-            registrationFee += taxBase * 0.06;
+            registrationFee += taxBase * 0.03;
           } else {
-            registrationFee += taxBase * 0.10;
+            registrationFee += taxBase * 0.12;
           }
       } else if (this.region == "wallonia") {
           // Reference: https://www.notaire.be/acheter-louer-emprunter/droits-d-enregistrement/en-region-wallonne-3/abattement-en-cas-dhabitation-unique
